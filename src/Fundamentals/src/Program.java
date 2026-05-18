@@ -11,7 +11,9 @@ void main(String[] args) {
     IO.println("2: L02 Operators");
     IO.println("3: L03 Conditions");
     IO.println("4: L04 Guess The Number");
-    IO.print("Select lesson (0-4): ");
+	IO.println("5: L05 Some Math Functions");
+	IO.println("6: L06 Printf Sample");
+    IO.print("Select lesson (0-6): ");
 
     int selection = scanner.nextInt();
     runByCode(String.valueOf(selection));
@@ -39,9 +41,17 @@ private static void runByCode(String code) {
         case "L04":
             Lesson04GuessTheNumber.run();
             break;
+		case "5":
+		case "L05":
+			Lesson05SomeMath.run();
+			break;
+		case "6":
+        case "L06":
+            Lesson06Printf.run();
+            break;
         default:
             IO.println("Unknown lesson code: " + code);
-            IO.println("Use 0-4 or L00-L04");
+            IO.println("Use 0-6 or L00-L06");
             break;
     }
 }
