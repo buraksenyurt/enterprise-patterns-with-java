@@ -1,4 +1,4 @@
-void main(String[] args) {
+void main(String[] args) throws InterruptedException {
     if (args.length > 0) {
         runByCode(args[0]);
         return;
@@ -18,13 +18,14 @@ void main(String[] args) {
     IO.println("9 : L09 Inch/Cm Calculator");
     IO.println("10: L10 Password Checker");
     IO.println("11: L11 Guess the number again");
+    IO.println("12: L12 Loops");
     IO.print("Select lesson ");
 
     int selection = scanner.nextInt();
     runByCode(String.valueOf(selection));
 }
 
-private static void runByCode(String code) {
+private static void runByCode(String code) throws InterruptedException {
     switch (code) {
         case "0":
         case "L00":
@@ -73,6 +74,10 @@ private static void runByCode(String code) {
         case "11":
         case "L11":
             Lesson11GuessTheNumberAgain.run();
+            break;
+        case "12":
+        case "L12":
+            Lesson12Loops.run();
             break;
         default:
             IO.println("Unknown lesson code: " + code);

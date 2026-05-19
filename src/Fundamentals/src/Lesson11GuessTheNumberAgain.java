@@ -29,5 +29,7 @@ public class Lesson11GuessTheNumberAgain {
         } while (userGuess != computerNumber);
 
         System.out.println("Yeniden görüşmek üzere.");
+        
+        scanner.close();
     }
 }
