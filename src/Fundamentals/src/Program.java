@@ -14,7 +14,8 @@ void main(String[] args) {
     IO.println("5: L05 Some Math Functions");
     IO.println("6: L06 Printf Sample");
     IO.println("7: L07 String Members");
-    IO.print("Select lesson (0-7): ");
+    IO.println("8: L08 Inch/Cm Calculator");
+    IO.print("Select lesson (0-8): ");
 
     int selection = scanner.nextInt();
     runByCode(String.valueOf(selection));
@@ -54,9 +55,13 @@ private static void runByCode(String code) {
         case "L07":
             Lesson07StringMembers.run();
             break;
+        case "8":
+        case "L08":
+            Lesson08LengthConverter.run();
+            break;
         default:
             IO.println("Unknown lesson code: " + code);
-            IO.println("Use 0-7 or L00-L07");
+            IO.println("Use 0-8 or L00-L08");
             break;
     }
 }

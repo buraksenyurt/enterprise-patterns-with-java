@@ -63,5 +63,14 @@ public class Lesson03Conditions {
                 System.out.println("Unknown");
                 break;
         }
+
+        // Ternary :? operator
+        int graduatePoint = random.nextInt(10, 100);
+        String result = graduatePoint > 70 ? "PASS" : "FAIL";
+        System.out.println("Sınav sonucu : " + result);
+
+        int hours = random.nextInt(0, 24);
+        String timeOfDay = (hours < 12) ? "A.M." : "P.M";
+        System.out.println("Saat " + hours + " " + timeOfDay);
     }
 }
