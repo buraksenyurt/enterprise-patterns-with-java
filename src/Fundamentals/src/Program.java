@@ -19,6 +19,8 @@ void main(String[] args) throws InterruptedException {
     IO.println("10: L10 Password Checker");
     IO.println("11: L11 Guess the number again");
     IO.println("12: L12 Loops");
+    IO.println("13: L13 Methods");
+    IO.println("14: L14 Arrays");
     IO.print("Select lesson ");
 
     int selection = scanner.nextInt();
@@ -78,6 +80,14 @@ private static void runByCode(String code) throws InterruptedException {
         case "12":
         case "L12":
             Lesson12Loops.run();
+            break;
+        case "13":
+        case "L13":
+            Lesson13Methods.run();
+            break;
+        case "14":
+        case "L14":
+            Lesson14Arrays.run();
             break;
         default:
             IO.println("Unknown lesson code: " + code);
