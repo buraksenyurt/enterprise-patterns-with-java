@@ -29,6 +29,6 @@ public class Lesson08LengthConverter {
             System.out.println("Invalid choice.");
         }
 
-        scanner.nextLine();
+        scanner.close();
     }
 }

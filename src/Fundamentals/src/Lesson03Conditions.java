@@ -64,6 +64,21 @@ public class Lesson03Conditions {
                 break;
         }
 
+        // Enhanced Switch
+        switch (direction) {
+            case 'K' -> System.out.println("North");
+            case 'G' -> System.out.println("South");
+            case 'B' -> System.out.println("West");
+            case 'D' -> System.out.println("East");
+            default -> System.out.println("Unknown");
+        }
+
+        switch (direction) {
+            case 'K', 'G' -> System.out.println("Yönümüz dikey eksende (+/-)");
+            case 'B', 'D' -> System.out.println("Yönümüz yatay eksende (+/-)");
+            default -> System.out.println("Yönümüz belli değil. Duralım.");
+        }
+
         // Ternary :? operator
         int graduatePoint = random.nextInt(10, 100);
         String result = graduatePoint > 70 ? "PASS" : "FAIL";
@@ -72,5 +87,7 @@ public class Lesson03Conditions {
         int hours = random.nextInt(0, 24);
         String timeOfDay = (hours < 12) ? "A.M." : "P.M";
         System.out.println("Saat " + hours + " " + timeOfDay);
+
+        scanner.close();
     }
 }

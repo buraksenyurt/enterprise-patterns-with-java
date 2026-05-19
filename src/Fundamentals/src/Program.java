@@ -6,16 +6,19 @@ void main(String[] args) {
 
     Scanner scanner = new Scanner(System.in);
     IO.println("Fundamentals Lesson Launcher");
-    IO.println("0: L00 Hello World");
-    IO.println("1: L01 Mad Libs Game");
-    IO.println("2: L02 Operators");
-    IO.println("3: L03 Conditions");
-    IO.println("4: L04 Guess The Number");
-    IO.println("5: L05 Some Math Functions");
-    IO.println("6: L06 Printf Sample");
-    IO.println("7: L07 String Members");
-    IO.println("8: L08 Inch/Cm Calculator");
-    IO.print("Select lesson (0-8): ");
+    IO.println("0 : L00 Hello World");
+    IO.println("1 : L01 Mad Libs Game");
+    IO.println("2 : L02 Operators");
+    IO.println("3 : L03 Conditions");
+    IO.println("4 : L04 Guess The Number");
+    IO.println("5 : L05 Some Math Functions");
+    IO.println("6 : L06 Printf Sample");
+    IO.println("7 : L07 String Members");
+    IO.println("8 : L08 Inch/Cm Calculator");
+    IO.println("9 : L09 Inch/Cm Calculator");
+    IO.println("10: L10 Password Checker");
+    IO.println("11: L11 Guess the number again");
+    IO.print("Select lesson ");
 
     int selection = scanner.nextInt();
     runByCode(String.valueOf(selection));
@@ -59,9 +62,21 @@ private static void runByCode(String code) {
         case "L08":
             Lesson08LengthConverter.run();
             break;
+        case "9":
+        case "L09":
+            Lesson09EnhancedSwitch.run();
+            break;
+        case "10":
+        case "L10":
+            Lesson10PasswordChecker.run();
+            break;
+        case "11":
+        case "L11":
+            Lesson11GuessTheNumberAgain.run();
+            break;
         default:
             IO.println("Unknown lesson code: " + code);
-            IO.println("Use 0-8 or L00-L08");
+            IO.println("Use number (like 0, 4) or L{number} (like L01, L04)");
             break;
     }
 }
