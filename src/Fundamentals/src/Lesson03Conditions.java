@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class Lesson03Conditions {
@@ -28,6 +29,22 @@ public class Lesson03Conditions {
         } else {
             IO.println("Hangi yöne gideceğimi bilemedim şimdi. Duralım.");
         }
+
+        // Nested If blocks sample
+        Random random = new Random();
+
+        boolean isSubscriber = random.nextBoolean();
+        boolean hasGoldenTicket = random.nextBoolean();
+        if (isSubscriber) {
+            if (hasGoldenTicket) {
+                System.out.println("%5 indirim kazandın");
+            } else {
+                System.out.println("%1 indirim kazandın");
+            }
+        } else {
+            System.out.println("Herhangi bir indirim yok");
+        }
+
 
         switch (direction) {
             case 'K':
