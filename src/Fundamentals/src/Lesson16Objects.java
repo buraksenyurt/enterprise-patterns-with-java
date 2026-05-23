@@ -21,6 +21,20 @@ public class Lesson16Objects {
 
         time = new Chrono(9, 26, 34);
         System.out.println(time);
+
+        time = new Chrono(13);
+        System.out.println(time);
+
+        System.out.println("Player scores");
+        Player[] players = {
+                new Player(1001, "Leydi Pink", 99.9),
+                new Player(1002, "Musician Angus", 95.56),
+                new Player(1003, "Ginger Bety", 87.45)
+        };
+
+        for (Player player : players) {
+            System.out.printf("%s (%.2f)\n", player.name, player.point);
+        }
     }
 }
 
