@@ -24,6 +24,7 @@ void main(String[] args) throws InterruptedException {
     IO.println("15: L15 2D Scene Creator");
     IO.println("16: L16 Objects");
     IO.println("17: L17 Static");
+    IO.println("18: L18 Inheritance");
     IO.print("Select lesson ");
 
     int selection = scanner.nextInt();
@@ -103,6 +104,10 @@ private static void runByCode(String code) throws InterruptedException {
         case "17":
         case "L17":
             Lesson17Static.run();
+            break;
+        case "18":
+        case "L18":
+            Lesson18Inheritance.run();
             break;
         default:
             IO.println("Unknown lesson code: " + code);
