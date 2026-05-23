@@ -27,6 +27,7 @@ void main(String[] args) throws InterruptedException {
     IO.println("18: L18 Inheritance");
     IO.println("19: L19 Abstract classes");
     IO.println("20: L20 Interfaces");
+    IO.println("21: L21 Getters and Setters");
     IO.print("Select lesson ");
 
     int selection = scanner.nextInt();
@@ -118,6 +119,10 @@ private static void runByCode(String code) throws InterruptedException {
         case "20":
         case "L20":
             Lesson20Inferface.run();
+            break;
+        case "21":
+        case "L21":
+            Lesson21GetterSetter.run();
             break;
         default:
             IO.println("Unknown lesson code: " + code);
