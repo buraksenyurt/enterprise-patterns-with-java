@@ -30,6 +30,9 @@ void main(String[] args) throws InterruptedException {
     IO.println("21: L21 Getters and Setters");
     IO.println("22: L22 Aggregation");
     IO.println("23: L23 Composition");
+    IO.println("24: L24 Wrapper");
+    IO.println("25: L25 ArrayList");
+    IO.println("26: L26 Exceptions");
     IO.print("Select lesson ");
 
     int selection = scanner.nextInt();
@@ -133,6 +136,18 @@ private static void runByCode(String code) throws InterruptedException {
         case "23":
         case "L23":
             Lesson23Composition.run();
+            break;
+        case "24":
+        case "L24":
+            Lesson24WrapperClass.run();
+            break;
+        case "25":
+        case "L25":
+            Lesson25ArrayList.run();
+            break;
+        case "26":
+        case "L26":
+            Lesson26Exceptions.run();
             break;
         default:
             IO.println("Unknown lesson code: " + code);
