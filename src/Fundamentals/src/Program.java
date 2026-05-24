@@ -34,6 +34,8 @@ void main(String[] args) throws InterruptedException {
     IO.println("25: L25 ArrayList");
     IO.println("26: L26 Exceptions");
     IO.println("27: L27 File Write/Read Operations");
+    IO.println("28: L28 Date and Time");
+    IO.println("29: L29 Anonymous Classes");
     IO.print("Select lesson ");
 
     int selection = scanner.nextInt();
@@ -153,6 +155,14 @@ private static void runByCode(String code) throws InterruptedException {
         case "27":
         case "L27":
             Lesson27FileWriteRead.run();
+            break;
+        case "28":
+        case "L28":
+            Lesson28DateAndTime.run();
+            break;
+        case "29":
+        case "L29":
+            Lesson29AnonymousClass.run();
             break;
         default:
             IO.println("Unknown lesson code: " + code);
