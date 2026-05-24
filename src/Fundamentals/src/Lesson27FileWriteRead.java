@@ -1,5 +1,7 @@
+import javax.sound.sampled.*;
 import java.io.*;
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class Lesson27FileWriteRead {
     public static void run() {
@@ -16,6 +18,49 @@ public class Lesson27FileWriteRead {
         */
         fileWriterSample();
         fileReaderSample();
+        playWavSample();
+    }
+
+    static void playWavSample() {
+        String filePath = "Supercar Engine Revving.wav";
+        File file = new File(filePath);
+
+        try (
+                Scanner input = new Scanner(System.in);
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file)
+        ) {
+
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            String userResponse = "";
+            String message = """
+                    Press P to play audio,
+                    Press S to stop audio,
+                    Press R to reset audio,
+                    Press Q to quit
+                    
+                    What is your choice->
+                    """;
+            while (!userResponse.equals("q")) {
+
+                System.out.println(message);
+                userResponse = input.nextLine().toLowerCase();
+
+                switch (userResponse) {
+                    case "s" -> clip.stop();
+                    case "r" -> clip.setMicrosecondPosition(0);
+                    case "p" -> clip.start();
+                    case "q" -> clip.close();
+                    default -> System.out.println("Wrong choice");
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found: " + ex.getMessage());
+        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("Goodbye!");
+        }
     }
 
     static void fileReaderSample() {
