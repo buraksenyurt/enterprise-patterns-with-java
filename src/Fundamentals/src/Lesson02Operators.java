@@ -7,22 +7,22 @@ public class Lesson02Operators {
         int z = 3;
 
         int sum = x + y + z;
-        IO.println(sum);
+        System.out.println(sum);
 
         int module = x % z;
-        IO.println(module);
+        System.out.println(module);
 
         x *= z;
-        IO.println(x);
+        System.out.println(x);
 
         double a = 10;
         double b = 3;
         double c = a / b;
-        IO.println(c);
+        System.out.println(c);
 
         int luckyNumber = 22;
         luckyNumber++;
-        IO.println(luckyNumber);
+        System.out.println(luckyNumber);
 
         Scanner scanner = new Scanner(System.in);
         String item = "Cizzborgır";
@@ -41,5 +41,7 @@ public class Lesson02Operators {
         System.out.println("Sipariş Özeti");
         System.out.println("` " + item + "`, (" + quantity + " adet)");
         System.out.println("Toplam tutar " + total);
+
+        scanner.close();
     }
 }

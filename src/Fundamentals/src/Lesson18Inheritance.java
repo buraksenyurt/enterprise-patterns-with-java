@@ -25,7 +25,7 @@ class Control {
     int id;
 
     void draw() {
-        IO.println("Drawing..." + this);
+        System.out.println("Drawing..." + this);
     }
 
     int getId() {

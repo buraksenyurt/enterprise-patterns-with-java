@@ -1,4 +1,4 @@
-public class Lesson20Inferface {
+public class Lesson20Interface {
     public static void run() {
         IStorageService storageService = new S3StorageService("AWS East-Europe", "bucket.east-eu.1235");
         var base64EncodedAsset = "BASD0123213==";

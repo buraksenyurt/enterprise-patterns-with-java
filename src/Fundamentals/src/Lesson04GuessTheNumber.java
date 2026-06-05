@@ -7,13 +7,15 @@ public class Lesson04GuessTheNumber {
         Random random = new Random();
         int number = random.nextInt(1, 6);
 
-        IO.println("Aklımdan bir sayı tuttum. 1 ile 6 arasında. Tek hakkın var.");
+        System.out.println("Aklımdan bir sayı tuttum. 1 ile 6 arasında. Tek hakkın var.");
         int guess = input.nextInt();
 
         if (guess == number) {
-            IO.println("Bravo! Tek seferde bildin.");
+            System.out.println("Bravo! Tek seferde bildin.");
         } else {
-            IO.println("Üzgünüm :(\nAklımdaki sayı = " + number);
+            System.out.println("Üzgünüm :(\nAklımdaki sayı = " + number);
         }
+
+        input.close();
     }
 }

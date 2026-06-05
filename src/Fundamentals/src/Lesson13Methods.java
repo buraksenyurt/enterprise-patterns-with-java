@@ -23,6 +23,7 @@ public class Lesson13Methods {
         // int total = Total(1, 2, 3, 4);
         int total = Total(5, 2, 7, 1, -1, 6);
         System.out.println(total);
+        scanner.close();
     }
 
     public static void Greetings() {

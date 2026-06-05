@@ -13,6 +13,7 @@ public class Lesson15SceneCreator {
 
         int[][] data = Create(rows, cols);
         printMatrix(data);
+        scanner.close();
     }
 
     static int[][] Create(int rows, int cols) {

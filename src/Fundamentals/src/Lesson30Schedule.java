@@ -23,5 +23,7 @@ public class Lesson30Schedule {
             }
         };
         timer.scheduleAtFixedRate(task, 0, 1000);
+
+        input.close();
     }
 }
