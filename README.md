@@ -2,6 +2,27 @@
 
 Bu çalışma alanında Java programlama dili ile **Enterprise Patterns and Practices** konularını ele almaya çalışıyorum. Bu konular, büyük ölçekli uygulamalar geliştirmek için kullanılan tasarım desenleri ve pratikleri içeriyor. Java dilinin temelleri, nesne yönelimli dil felsefesinin Java'da uygulanışı, gerçek hayat senaryolarında sık kullanılan tasarım desenlerinden bazıları, popüler yazılım mimarilerinde öne çıkan önemli pratikler ve Java ekosisteminde yaygın olarak kullanılan araçlar ve çerçeveler gibi konulara odaklanmayı planlıyorum.
 
+## Platform
+
+Çalışma ortamı olarak emektar **Ubuntu (26.04)** sistemimi seçtim.
+
+## Kurulumlar
+
+```bash
+sudo apt update
+sudo apt install default-jdk maven
+
+# Kontrol
+java -version
+javac -version
+mvn -version
+
+# Vs Code tarafı için gerekli eklenti
+code --install-extension vscjava.vscode-java-pack
+```
+
+**Vs Code** tarafında bir Java projesi oluşturmanın en kolay yolu `Ctrl+Shift+P` sonrası `Java: Create Java Project` komutunu kullanmak.
+
 ## İçerik
 
 - **Fundamentals Projesi:** Bu projede Java dilinin genel özelliklerinin ele alındığı temel bilgiler yer alıyor. Hello World uygulamasında OOP'ın temel ilkelerine ve Java'nın bazı ileri seviye özelliklerine yer veriliyor.
