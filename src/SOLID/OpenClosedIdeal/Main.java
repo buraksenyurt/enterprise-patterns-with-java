@@ -10,8 +10,7 @@ import SOLID.OpenClosedCommon.Utility;
  * Fark: OpenClosedBegin'de her LLM'in kendi sınıfı vardı ve Main değişmesi
  * gerekliydi.
  * Burada: Abstract Subscriber + Polymorphism = yeni LLM eklemek = sadece yeni
- * sınıf.
- * Main HIÇBIR değişikliğe ihtiyaç duymaz.
+ * sınıf. Main herhangi bir değişikliğe ihtiyaç duymaz.
  */
 public class Main {
     public static void main(String[] args) {
