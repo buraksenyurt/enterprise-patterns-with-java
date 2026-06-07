@@ -23,7 +23,6 @@ public class Main {
     private static void demonstrateLiskovViolation() {
         System.out.println("Liskov Substitution Principle ihlalleri içeren örnek.\n");
 
-        // Test parametreleri
         long[] testTokens = { 1000L, 5000L, 15000L };
 
         System.out.println("1. AccurateTokenCalculator (LSP uyumlu)");
@@ -46,7 +45,7 @@ public class Main {
     private static void testCalculator(TokenCalculator calc, long[] testTokens) {
         for (long tokens : testTokens) {
             double cost = calc.calculateCost(tokens);
-            System.out.printf("  %7d token → %.4f AI Credit\n", tokens, cost);
+            System.out.printf("  %7d token -> %.4f AI Credit\n", tokens, cost);
         }
     }
 
