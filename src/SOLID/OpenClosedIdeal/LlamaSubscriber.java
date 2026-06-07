@@ -4,10 +4,8 @@ import java.util.List;
 
 import SOLID.OpenClosedCommon.SessionHistory;
 
-/**
- * Llama: Açık kaynak LLM provider'ı, toplu işlem bonusuyla.
- * OCP'nin "Open to extension" ifadesini karşılar.
- */
+// Llama: Açık kaynak LLM provider'ı, toplu işlem bonusuyla.
+// OCP'nin "Open to extension" ifadesini karşılar.
 public class LlamaSubscriber extends Subscriber {
     private boolean batchProcessingEnabled; // Toplu işlem bonusu aktif?
 

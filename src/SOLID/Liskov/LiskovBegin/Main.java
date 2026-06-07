@@ -1,20 +1,21 @@
 package SOLID.Liskov.LiskovBegin;
 
-/**
- * Liskov Substitution Principle İhlali
- * 
- * LSP Tanım:
- * 
- * "Türetilmiş(derived) sınıflar, türediği temel(base) sınıfların yerini
- * tam olarak alabilmelidir. Yani, T tipi yerine S tipi kullanıldığında
- * programın doğruluğu bozulmamalıdır."
- * 
- * Senaryo: Token maliyet hesaplaması - 3 farklı hesaplayıcı:
- * 
- * AccurateTokenCalculator: LSP'yi doğru karşılıyor.
- * FastTokenCalculator: Tutarsız değerler üreterek LSP İhlalini simüle ediyor
- * OfflineTokenCalculator: Exception throw ederek LSP İhlalini simüle ediyor
- */
+/*
+Liskov Substitution Principle İhlali
+ 
+LSP Tanım:
+ 
+"Türetilmiş(derived) sınıflar, türediği temel(base) sınıfların yerini
+tam olarak alabilmelidir. Yani, T tipi yerine S tipi kullanıldığında
+programın doğruluğu bozulmamalıdır."
+ 
+Senaryo: Token maliyet hesaplaması - 3 farklı hesaplayıcı:
+ 
+AccurateTokenCalculator: LSP'yi doğru karşılıyor.
+FastTokenCalculator: Tutarsız değerler üreterek LSP İhlalini simüle ediyor
+OfflineTokenCalculator: Exception throw ederek LSP İhlalini simüle ediyor
+
+*/
 public class Main {
     public static void main(String[] args) {
         demonstrateLiskovViolation();

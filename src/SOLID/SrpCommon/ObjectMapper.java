@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * com.fasterxml.jackson.databind.ObjectMapper yerine kullandığımız deneysel bir sınıf.
- */
+// com.fasterxml.jackson.databind.ObjectMapper yerine kullandığımız deneysel bir sınıf.
 public class ObjectMapper {
 
     public <T> T readValue(String json, Class<T> clazz) throws IOException {

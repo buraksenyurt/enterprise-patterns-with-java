@@ -7,16 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * SessionHistory: Tüm LLM modelleri tarafından paylaşılan ortak utility sınıfı.
- * Abone oturumlarını ve context token'larını depolar.
- */
+/*
+SessionHistory: Tüm LLM modelleri tarafından paylaşılan ortak utility sınıfı.
+Abone oturumlarını ve context token'larını depolar.
+*/
 public class SessionHistory {
 
-    /**
-     * Bir abonelik oturumunu temsil eder.
-     * Her oturum: başlama zamanı, token sayısı, ve abone ID'si içerir.
-     */
+    // Bir abonelik oturumunu temsil eder.
+    // Her oturum: başlama zamanı, token sayısı, ve abone ID'si içerir.
     public static class Context {
 
         private LocalDateTime begin;

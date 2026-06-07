@@ -4,10 +4,8 @@ import java.util.List;
 
 import SOLID.OpenClosedCommon.SessionHistory;
 
-/**
- * Grok: Bütçe dostu LLM provider'ı, indirim desteğiyle.
- * OCP'nin "Açık extension'a" kısmını karşılar.
- */
+// Grok: Bütçe dostu LLM provider'ı, indirim desteğiyle.
+// OCP'nin "Açık extension'a" kısmını karşılar.
 public class GrokSubscriber extends Subscriber {
     private String subscriptionTier; // "starter" veya "plus"
     private int discountPercent;     // 0-100 arası indirim %

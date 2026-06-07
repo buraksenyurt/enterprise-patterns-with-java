@@ -4,24 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import SOLID.OpenClosedCommon.Utility;
 
-/**
- * OpenClosedIdeal: OCP (Open/Closed Principle) DOĞRU uygulaması
- * 
- * Fark: OpenClosedBegin'de her LLM'in kendi sınıfı vardı ve Main değişmesi
- * gerekliydi.
- * Burada: Abstract Subscriber + Polymorphism = yeni LLM eklemek = sadece yeni
- * sınıf. Main herhangi bir değişikliğe ihtiyaç duymaz.
- */
+/*
+OpenClosedIdeal: OCP (Open/Closed Principle) DOĞRU uygulaması
+ 
+Fark: OpenClosedBegin'de her LLM'in kendi sınıfı vardı ve Main değişmesi gerekiyordu.
+Burada: Abstract Subscriber + Polymorphism = yeni LLM eklemek = sadece yeni sınıf. 
+Main herhangi bir değişikliğe ihtiyaç duymaz.
+
+*/
 public class Main {
     public static void main(String[] args) {
         demonstrateOcpCompliance();
     }
 
-    /**
-     * OCP'nin doğru uygulamasını gösterir.
-     * Yeni bir LLM eklemek için Main'i değiştirmemize gerek yoktur, sadece yeni bir
-     * Subscriber sınıfı ekleriz.
-     */
+    // OCP'nin doğru uygulamasını gösterir.
+    // Yeni bir LLM eklemek için Main'i değiştirmemize gerek yoktur, sadece yeni bir Subscriber sınıfı ekleriz.
     private static void demonstrateOcpCompliance() {
         System.out.println("Open/Closed prensibinin doğru uygulandığı örnek:");
         System.out.println("Polymorphism kullanarak yeni LLM'ler kolayca eklenebilir.");
