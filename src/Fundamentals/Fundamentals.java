@@ -42,6 +42,8 @@ public class Fundamentals {
         System.out.println("29: L29 Anonymous Classes");
         System.out.println("30: L30 Scheduling with TimerTask");
         System.out.println("31: L31 Generics");
+        System.out.println("32: L32 Hashmap");
+        System.out.println("33: L33 Enums");
         System.out.print("Select lesson ");
 
         int selection = scanner.nextInt();
@@ -178,6 +180,14 @@ public class Fundamentals {
             case "31":
             case "L31":
                 Lesson31Generics.run();
+                break;
+            case "32":
+            case "L32":
+                Lesson32Hashmap.run();
+                break;
+            case "33":
+            case "L33":
+                Lesson33Enums.run();
                 break;
             default:
                 System.out.println("Unknown lesson code: " + code);
