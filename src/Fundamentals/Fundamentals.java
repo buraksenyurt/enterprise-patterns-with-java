@@ -46,6 +46,7 @@ public class Fundamentals {
         System.out.println("33: L33 Enums");
         System.out.println("34: L34 Threading");
         System.out.println("35: L35 Multi-threading with Runnable");
+        System.out.println("36: L36 ExecutorService");
         System.out.print("Select lesson ");
 
         int selection = scanner.nextInt();
@@ -55,154 +56,47 @@ public class Fundamentals {
 
     private static void runByCode(String code) throws InterruptedException {
         switch (code) {
-            case "0":
-            case "L00":
-                Lesson00HelloWorld.run();
-                break;
-            case "1":
-            case "L01":
-                Lesson01MadLibsGame.run();
-                break;
-            case "2":
-            case "L02":
-                Lesson02Operators.run();
-                break;
-            case "3":
-            case "L03":
-                Lesson03Conditions.run();
-                break;
-            case "4":
-            case "L04":
-                Lesson04GuessTheNumber.run();
-                break;
-            case "5":
-            case "L05":
-                Lesson05SomeMath.run();
-                break;
-            case "6":
-            case "L06":
-                Lesson06Printf.run();
-                break;
-            case "7":
-            case "L07":
-                Lesson07StringMembers.run();
-                break;
-            case "8":
-            case "L08":
-                Lesson08LengthConverter.run();
-                break;
-            case "9":
-            case "L09":
-                Lesson09EnhancedSwitch.run();
-                break;
-            case "10":
-            case "L10":
-                Lesson10PasswordChecker.run();
-                break;
-            case "11":
-            case "L11":
-                Lesson11GuessTheNumberAgain.run();
-                break;
-            case "12":
-            case "L12":
-                Lesson12Loops.run();
-                break;
-            case "13":
-            case "L13":
-                Lesson13Methods.run();
-                break;
-            case "14":
-            case "L14":
-                Lesson14Arrays.run();
-                break;
-            case "15":
-            case "L15":
-                Lesson15SceneCreator.run();
-                break;
-            case "16":
-            case "L16":
-                Lesson16Objects.run();
-                break;
-            case "17":
-            case "L17":
-                Lesson17Static.run();
-                break;
-            case "18":
-            case "L18":
-                Lesson18Inheritance.run();
-                break;
-            case "19":
-            case "L19":
-                Lesson19AbstractClass.run();
-                break;
-            case "20":
-            case "L20":
-                Lesson20Interface.run();
-                break;
-            case "21":
-            case "L21":
-                Lesson21GetterSetter.run();
-                break;
-            case "22":
-            case "L22":
-                Lesson22Aggregation.run();
-                break;
-            case "23":
-            case "L23":
-                Lesson23Composition.run();
-                break;
-            case "24":
-            case "L24":
-                Lesson24WrapperClass.run();
-                break;
-            case "25":
-            case "L25":
-                Lesson25ArrayList.run();
-                break;
-            case "26":
-            case "L26":
-                Lesson26Exceptions.run();
-                break;
-            case "27":
-            case "L27":
-                Lesson27FileWriteRead.run();
-                break;
-            case "28":
-            case "L28":
-                Lesson28DateAndTime.run();
-                break;
-            case "29":
-            case "L29":
-                Lesson29AnonymousClass.run();
-                break;
-            case "30":
-            case "L30":
-                Lesson30Schedule.run();
-                break;
-            case "31":
-            case "L31":
-                Lesson31Generics.run();
-                break;
-            case "32":
-            case "L32":
-                Lesson32Hashmap.run();
-                break;
-            case "33":
-            case "L33":
-                Lesson33Enums.run();
-                break;
-            case "34":
-            case "L34":
-                Lesson34Threading.run();
-                break;
-            case "35":
-            case "L35":
-                Lesson35MultiThreading.run();
-                break;
-            default:
+            case "0", "L00" -> Lesson00HelloWorld.run();
+            case "1", "L01" -> Lesson01MadLibsGame.run();
+            case "2", "L02" -> Lesson02Operators.run();
+            case "3", "L03" -> Lesson03Conditions.run();
+            case "4", "L04" -> Lesson04GuessTheNumber.run();
+            case "5", "L05" -> Lesson05SomeMath.run();
+            case "6", "L06" -> Lesson06Printf.run();
+            case "7", "L07" -> Lesson07StringMembers.run();
+            case "8", "L08" -> Lesson08LengthConverter.run();
+            case "9", "L09" -> Lesson09EnhancedSwitch.run();
+            case "10", "L10" -> Lesson10PasswordChecker.run();
+            case "11", "L11" -> Lesson11GuessTheNumberAgain.run();
+            case "12", "L12" -> Lesson12Loops.run();
+            case "13", "L13" -> Lesson13Methods.run();
+            case "14", "L14" -> Lesson14Arrays.run();
+            case "15", "L15" -> Lesson15SceneCreator.run();
+            case "16", "L16" -> Lesson16Objects.run();
+            case "17", "L17" -> Lesson17Static.run();
+            case "18", "L18" -> Lesson18Inheritance.run();
+            case "19", "L19" -> Lesson19AbstractClass.run();
+            case "20", "L20" -> Lesson20Interface.run();
+            case "21", "L21" -> Lesson21GetterSetter.run();
+            case "22", "L22" -> Lesson22Aggregation.run();
+            case "23", "L23" -> Lesson23Composition.run();
+            case "24", "L24" -> Lesson24WrapperClass.run();
+            case "25", "L25" -> Lesson25ArrayList.run();
+            case "26", "L26" -> Lesson26Exceptions.run();
+            case "27", "L27" -> Lesson27FileWriteRead.run();
+            case "28", "L28" -> Lesson28DateAndTime.run();
+            case "29", "L29" -> Lesson29AnonymousClass.run();
+            case "30", "L30" -> Lesson30Schedule.run();
+            case "31", "L31" -> Lesson31Generics.run();
+            case "32", "L32" -> Lesson32Hashmap.run();
+            case "33", "L33" -> Lesson33Enums.run();
+            case "34", "L34" -> Lesson34Threading.run();
+            case "35", "L35" -> Lesson35MultiThreading.run();
+            case "36", "L36" -> Lesson36ExecutorService.run();
+            default -> {
                 System.out.println("Unknown lesson code: " + code);
                 System.out.println("Use number (like 0, 4) or L{number} (like L01, L04)");
-                break;
+            }
         }
     }
 }
