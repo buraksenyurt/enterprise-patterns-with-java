@@ -1,3 +1,7 @@
+/*
+    Enum türü yapıcı metot(constructor) içerebilir ve sabit değerlere farklı türler atayabiliriz.
+    Rust tarafındaki enum yapısını hatırlattı gibi ama oradaki kullanımının daha zengin olduğunu düşünüyorum.
+*/
 public enum ThemeColor {
 
     RED(255, 0, 0),

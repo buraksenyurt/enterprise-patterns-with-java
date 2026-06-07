@@ -7,19 +7,19 @@ public class Lesson32Hashmap {
         container.put("IStorageService", "AwsS3StorageService");
         container.put("ILogger", "MockLogger");
         container.put("IDataContext", "AdventureWorksDbContext");
-        container.put("ILogger", "SerilogConsoleLogger"); // Override
+        container.put("ILogger", "SerilogConsoleLogger"); // Daha önce tanımladığımız ILogger'ı yeni Value ile eziyoruz.
 
         System.out.println(container);
 
         System.out.println(container.get("ILogger"));
 
         if (container.containsKey("ILogger")) {
-            System.out.println("There is a logger in DI Container");
+            System.out.println("DI Container içerisinde ILogger bileşeni kayıtlı: " + container.get("ILogger"));
         } else {
-            System.out.println("There is no registered logger component");
+            System.out.println("DI Container içerisinde ILogger bileşeni kayıtlı değil.");
         }
 
-        System.out.println("is this container has a concrete logger spec:" + container.containsValue("MockLogger"));
+        System.out.println("DI Container içerisinde MockLogger bileşeni kayıtlı mı: " + container.containsValue("MockLogger"));
 
         for (String key : container.keySet()) {
             System.out.println(key + " " + container.get(key));
