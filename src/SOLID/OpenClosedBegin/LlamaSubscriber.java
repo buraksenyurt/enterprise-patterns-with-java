@@ -2,6 +2,8 @@ package SOLID.OpenClosedBegin;
 
 import java.util.List;
 
+import SOLID.OpenClosedCommon.SessionHistory;
+
 public class LlamaSubscriber {
     private Long subscriberId;
     private boolean batchProcessingEnabled;

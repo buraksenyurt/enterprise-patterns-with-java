@@ -2,6 +2,8 @@ package SOLID.OpenClosedBegin;
 
 import java.util.List;
 
+import SOLID.OpenClosedCommon.SessionHistory;
+
 public class ClaudeSubscriber {
     private Long subscriberId;
     private String subscriptionTier; // "pro", "standard"
