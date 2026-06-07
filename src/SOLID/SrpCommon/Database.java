@@ -1,4 +1,4 @@
-package SrpBegin;
+package SOLID.SrpCommon;
 
 import java.util.HashMap;
 import java.util.Map;

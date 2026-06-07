@@ -1,4 +1,4 @@
-package SrpBegin;
+package SOLID.SrpIdeal;
 
 import java.io.IOException;
 
@@ -7,6 +7,9 @@ public class Main {
     private static final String INVALID_USER_JSON = "{\"name\": \"JaneDoe\", \"email\": \"wrong.email\", \"isActive\": false}";
 
     public static void main(String[] args) throws IOException {
+        System.out.println("Single Responsibility ilkesinin doğru uygulanmış hali.");
+        System.out.println("Lütfen kaynak kodlara bakınız.");
+
         var controller = new SubscriberController();
         String response = controller.createSubscriber(VALID_USER_JSON);
         if (!response.equalsIgnoreCase("SUCCESS")) {

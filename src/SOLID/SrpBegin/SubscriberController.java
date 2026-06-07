@@ -1,8 +1,12 @@
-package SrpBegin;
+package SOLID.SrpBegin;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import SOLID.SrpCommon.Database;
+import SOLID.SrpCommon.ObjectMapper;
+import SOLID.SrpCommon.Subscriber;
 
 public class SubscriberController {
     private Database db = new Database();

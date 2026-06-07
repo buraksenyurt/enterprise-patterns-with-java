@@ -1,4 +1,4 @@
-package SrpBegin;
+package SOLID.SrpCommon;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

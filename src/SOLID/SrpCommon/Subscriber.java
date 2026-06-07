@@ -1,4 +1,4 @@
-package SrpBegin;
+package SOLID.SrpCommon;
 
 public class Subscriber {
     private String name;
