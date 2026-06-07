@@ -44,6 +44,7 @@ public class Fundamentals {
         System.out.println("31: L31 Generics");
         System.out.println("32: L32 Hashmap");
         System.out.println("33: L33 Enums");
+        System.out.println("34: L34 Threading");
         System.out.print("Select lesson ");
 
         int selection = scanner.nextInt();
@@ -188,6 +189,10 @@ public class Fundamentals {
             case "33":
             case "L33":
                 Lesson33Enums.run();
+                break;
+            case "34":
+            case "L34":
+                Lesson34Threading.run();
                 break;
             default:
                 System.out.println("Unknown lesson code: " + code);
