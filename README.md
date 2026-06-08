@@ -1,6 +1,6 @@
 # Enterprise Pattern and Practices with Java
 
-Bu çalışma alanında Java programlama dili ile **Enterprise Patterns and Practices** konularını ele almaya çalışıyorum. Bu konular, büyük ölçekli uygulamalar geliştirmek için kullanılan tasarım desenleri ve pratikleri içeriyor. Java dilinin temelleri, nesne yönelimli dil felsefesinin Java'da uygulanışı, gerçek hayat senaryolarında sık kullanılan tasarım desenlerinden bazıları, popüler yazılım mimarilerinde öne çıkan önemli pratikler ve Java ekosisteminde yaygın olarak kullanılan araçlar ve çerçeveler gibi konulara odaklanmayı planlıyorum.
+Bu çalışma alanında Java programlama dili ile **Enterprise Patterns and Practices** konularını ele almaya çalışıyorum. Bu konular, büyük ölçekli uygulamalar geliştirmek için kullanılan tasarım desenleri ve pratikleri içeriyor. Java dilinin temelleri, nesne yönelimli dil felsefesinin Java'da uygulanışı, gerçek hayat senaryolarında sık kullanılan tasarım desenlerinden bazıları, popüler yazılım mimarilerinde öne çıkan önemli pratikler ve Java ekosisteminde yaygın olarak kullanılan araçlar ve çerçeveler gibi konulara odaklanmayı planlıyorum. Örnek kodları Sektör Kampüste programı kapsamında hazırladığım müfredatlar içersinde de kullanabilirim.
 
 ## Platform
 
@@ -27,12 +27,16 @@ code --install-extension vscjava.vscode-java-pack
 
 - **Fundamentals Projesi:** Bu projede Java dilinin genel özelliklerinin ele alındığı temel bilgiler yer alıyor. Hello World uygulamasında OOP'ın temel ilkelerine ve Java'nın bazı ileri seviye özelliklerine yer veriliyor.
 - **SOLID Projesi:** SOLID prensiplerinin her biri için ayrı bir alt proje oluşturulmuş durumda. Her alt projede, ilgili prensibin yanlış ve doğru uygulamalarını gösteren örnekler yer alıyor. Bu örnekler prensiplerin neden önemli olduğunu ve nasıl uygulanması gerektiğini anlamaya yardımcı olacaktır.
+- **Design Patterns Projesi:** Bu projede, yazılım geliştirme sürecinde sıkça karşılaşılan problemler için kullanılan tasarım desenlerinden bazıları ele alınacak. Özellikle kurumsal projelerde sık kullanılanlara dair örneklere yer vermeyi planlıyorum.
 
 > DETAYLAR ZAMANLA EKLENECEK
 
 ## Yardımcı Kaynaklar
 
 - [Java Programming Cheatsheet - Princeton University](https://introcs.cs.princeton.edu/java/11cheatsheet/)
+- [Maven Central Repository](https://central.sonatype.com/)
+- [Awesome Java](https://github.com/akullpp/awesome-java)
+- [Useful Java Links](https://github.com/Vedenin/useful-java-links/)
 
 ## Ekler
 
