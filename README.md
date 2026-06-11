@@ -31,6 +31,16 @@ code --install-extension vscjava.vscode-java-pack
 
 > DETAYLAR ZAMANLA EKLENECEK
 
+## Design Patterns
+
+Yardımcı diagramlar.
+
+### Creational Patterns - Builder Pattern
+
+### Structural Patterns - Command Pattern
+
+![Command Pattern](./images/CommandPatternUml.png)
+
 ## Yardımcı Kaynaklar
 
 - [Java Programming Cheatsheet - Princeton University](https://introcs.cs.princeton.edu/java/11cheatsheet/)
