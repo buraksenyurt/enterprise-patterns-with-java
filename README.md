@@ -1,4 +1,4 @@
-# Enterprise Pattern and Practices with Java
+# Enterprise Patterns and Practices with Java
 
 Bu çalışma alanında Java programlama dili ile **Enterprise Patterns and Practices** konularını ele almaya çalışıyorum. Bu konular, büyük ölçekli uygulamalar geliştirmek için kullanılan tasarım desenleri ve pratikleri içeriyor. Java dilinin temelleri, nesne yönelimli dil felsefesinin Java'da uygulanışı, gerçek hayat senaryolarında sık kullanılan tasarım desenlerinden bazıları, popüler yazılım mimarilerinde öne çıkan önemli pratikler ve Java ekosisteminde yaygın olarak kullanılan araçlar ve çerçeveler gibi konulara odaklanmayı planlıyorum. Örnek kodları Sektör Kampüste programı kapsamında hazırladığım müfredatlar içersinde de kullanabilirim.
 
@@ -36,6 +36,8 @@ code --install-extension vscjava.vscode-java-pack
 Yardımcı diagramlar.
 
 ### Creational Patterns - Builder Pattern
+
+![Builder](./images/BuilderPatternUml.png)
 
 ### Structural Patterns - Command Pattern
 
