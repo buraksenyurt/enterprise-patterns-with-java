@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandInGame;
+package DesignPatterns.Behavioral.CommandInGame;
 
 // Client: Oyun döngüsü ve oyuncu girişlerini simüle eden sınıf
 public class Game {

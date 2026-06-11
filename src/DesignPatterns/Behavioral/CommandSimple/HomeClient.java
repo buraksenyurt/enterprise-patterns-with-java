@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandSimple;
+package DesignPatterns.Behavioral.CommandSimple;
 
 public class HomeClient {
     public static void main(String[] args) {

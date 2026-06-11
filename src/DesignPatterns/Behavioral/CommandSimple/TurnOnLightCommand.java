@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandSimple;
+package DesignPatterns.Behavioral.CommandSimple;
 
 // Concrete Command: Işığı açma komutu
 public class TurnOnLightCommand implements SmartHomeCommand {

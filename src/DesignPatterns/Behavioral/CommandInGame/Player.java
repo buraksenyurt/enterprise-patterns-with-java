@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandInGame;
+package DesignPatterns.Behavioral.CommandInGame;
 
 // Receiver: Oyuncunun hareket ve atak işlemlerini gerçekleştiren sınıf
 public class Player {

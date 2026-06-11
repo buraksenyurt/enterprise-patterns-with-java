@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.Command;
+package DesignPatterns.Behavioral.Command;
 
 import java.util.LinkedList;
 import java.util.List;

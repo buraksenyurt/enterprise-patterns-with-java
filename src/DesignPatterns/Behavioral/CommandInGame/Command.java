@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandInGame;
+package DesignPatterns.Behavioral.CommandInGame;
 
 // Command arayüzü: Eylemi gerçekleştirecek Player sınıfının kullanacağı ortak arayüz
 // Böylece aynı komut sadece Player sınıfına değil, farklı oyuncu türlerine de uygulanabilir hale gelir

@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandInGame;
+package DesignPatterns.Behavioral.CommandInGame;
 
 public class Vector {
     private int x;

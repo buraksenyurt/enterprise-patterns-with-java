@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.Command;
+package DesignPatterns.Behavioral.Command;
 
 public class AddDestinationCommand implements Command {
     private String destination;

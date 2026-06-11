@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandInGame;
+package DesignPatterns.Behavioral.CommandInGame;
 
 public class MoveCommand implements Command {
     private final Vector direction;

@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.Command;
+package DesignPatterns.Behavioral.Command;
 
 // Concrete Command sınıfı
 public class AddSourceCommand implements Command {

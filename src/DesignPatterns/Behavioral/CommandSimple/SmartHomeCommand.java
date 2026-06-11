@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandSimple;
+package DesignPatterns.Behavioral.CommandSimple;
 
 // Command arayüzü
 public interface SmartHomeCommand {

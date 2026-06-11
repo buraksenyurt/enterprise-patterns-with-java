@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandSimple;
+package DesignPatterns.Behavioral.CommandSimple;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

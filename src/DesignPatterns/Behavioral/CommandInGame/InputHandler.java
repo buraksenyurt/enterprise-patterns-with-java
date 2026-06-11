@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.CommandInGame;
+package DesignPatterns.Behavioral.CommandInGame;
 
 // Invoker: Tuşları dinleyen ve ilgili butona atanmış komutları döndüren sınıf.
 // Doğrudan eylemi gerçelleştirmez, sadece hangi komutun çalıştırılacağını belirler.

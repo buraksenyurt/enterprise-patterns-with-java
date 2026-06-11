@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.Command;
+package DesignPatterns.Behavioral.Command;
 
 // Command sınıflarının kullanacağı ortak arayüz (Command Interface)
 public interface Command {

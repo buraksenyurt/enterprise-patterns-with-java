@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.Command;
+package DesignPatterns.Behavioral.Command;
 
 public class Client {
     public static void main(String[] args) throws InterruptedException {

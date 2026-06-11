@@ -1,4 +1,4 @@
-package DesignPatterns.Creational.Structural.Command;
+package DesignPatterns.Behavioral.Command;
 
 // Receiver rolünü üstlenen sınıf
 public class DataTransferService {
