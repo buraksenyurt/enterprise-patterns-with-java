@@ -39,7 +39,11 @@ Yardımcı diagramlar.
 
 ![Builder](./images/BuilderPatternUml.png)
 
-### Structural Patterns - Command Pattern
+### Structural Patterns - Flyweight Pattern
+
+![Flyweight Pattern](./images/FlyweightPatternUml.png)
+
+### Behavioral Patterns - Command Pattern
 
 ![Command Pattern](./images/CommandPatternUml.png)
 
