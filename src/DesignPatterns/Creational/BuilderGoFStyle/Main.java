@@ -1,7 +1,7 @@
 package DesignPatterns.Creational.BuilderGoFStyle;
 
 /*
-    Bu örnekte ise diğerinden farklı olarak Gangs of Four'un tarifine uyan bir yaklaşım sergilenmekted.
+    Bu örnekte ise diğerinden farklı olarak Gangs of Four'un tarifine uyan bir yaklaşım sergilenmektedir.
 
     Farkları şöyle özetleyebiliriz;
 
