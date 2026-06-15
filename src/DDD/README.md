@@ -39,4 +39,41 @@ DDD daha çok iş modelini kodun tam merkezine yerleştirme yaklaşımıdır. Bu
 
 Projede oldukça yalın katmanlı *(layered)* mimari kullanacağız. Yapıyı hexagonal mimari türünde inşa edeceğiz. Burada altın kural bağımlılıkların yönünün *(Dependency Direction)* doğru uygulanması. Örneğin domain paketi sıfır framework bağımlılığına sahip olmalı ki domain modelindeki iş kurallarını çok kısa sürelerde hiçbir dış framework bağımlılığı olmadan test edebilelim. Bu sayede domain modelimizi daha esnek ve sürdürülebilir hale getireceğiz. Mimari kurguyu kabaca aşağıdaki şekilde olduğu gibi özetleyebiliriz.
 
-> DEVAM EDECEK...
+![DDD Basic](../../images/DDDBasic.png)
+
+## Proje İskeletinin Oluşturulması
+
+Spring Boot proje oluşturma aracı olan [Spring Initializr](https://start.spring.io/) adresini kullanarak projemizi oluşturabiliriz. İster web sitesinden ister **curl** komutu ile oluşturabiliriz.
+
+![Spring Boot Initializr](../../images/SpringBootInit.png)
+
+Özellikle kendi sistemimizde hangi Java ve Maven versiyonları olduğuna dikkat etmekte yarar var. Aynı işlemi terminal üzerinden de yapabiliriz.
+
+```bash
+curl https://start.spring.io/starter.zip \
+  -d type=maven-project \
+  -d language=java \
+  -d bootVersion=3.5.15 \
+  -d javaVersion=25 \
+  -d groupId=com.example \
+  -d artifactId=game-rental \
+  -d name=game-rental \
+  -d packageName=com.example.gamerental \
+  -d dependencies=web,data-jpa,postgresql,validation,flyway \
+  -o game-rental.zip
+
+unzip game-rental.zip -d game-rental
+cd game-rental
+```
+
+Dikkat edileceği üzere proje oluşturulurken bazı bağımlılıklar eklenmiş durumda *(dependencies)*. Bunları şöyle özetleyebiliriz.
+
+| **Bağımlılık** | **Ne işe yarar?** |
+| --- | --- |
+| **Spring Web** | REST API geliştirmek için gerekli olan Spring MVC altyapısını sağlar. Tomcat gibi gömülü bir web sunucusu içerir. |
+| **Spring Data JPA** | ORM *(Object-Relational Mapping)* işlemleri için gerekli altyapıyı sağlar. JPA standartlarını kullanarak veritabanı işlemlerini kolaylaştırır. |
+| **PostgreSQL Driver** | PostgreSQL veritabanına bağlanmak için gerekli sürücüyü sağlar. |
+| **Spring Validation** | Bean Validation API'sini kullanarak veri doğrulama işlemlerini kolaylaştırır. |
+| **Flyway** | Veritabanı şemasını yönetmek ve sürüm kontrolü sağlamak için kullanılan bir araçtır. Migrations işlemlerini kolaylaştırır. |
+
+> Örnekte postgresql veritabanı kullanılmakta olup **docker-compose** ile ayağa kaldırılmaktadır.
