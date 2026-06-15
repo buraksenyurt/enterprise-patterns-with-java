@@ -76,4 +76,74 @@ Dikkat edileceği üzere proje oluşturulurken bazı bağımlılıklar eklenmiş
 | **Spring Validation** | Bean Validation API'sini kullanarak veri doğrulama işlemlerini kolaylaştırır. |
 | **Flyway** | Veritabanı şemasını yönetmek ve sürüm kontrolü sağlamak için kullanılan bir araçtır. Migrations işlemlerini kolaylaştırır. |
 
-> Örnekte postgresql veritabanı kullanılmakta olup **docker-compose** ile ayağa kaldırılmaktadır.
+Örnekte postgresql veritabanı kullanılmakta olup **docker-compose** ile ayağa kaldırılmaktadır.
+
+```bash
+sudo docker-compose up -d
+```
+
+## Proje Oluşturulduktan Sonra Bazı Ayarlamalar
+
+Proje oluşturulduktan sonra postgresql desteği için yeni bir flyway bağımlılığı *(dependency)* eklememiz gerekebilir. Bunun için tüm proje ayarlarını içeren `pom.xml` dosyasına aşağıdaki bağımlılığı eklemek yeterli olacaktır.
+
+```xml
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-database-postgresql</artifactId>
+</dependency>
+```
+
+Eğer projeyi komut satırından oluşturduysak konfigurasyon dosyası *(application.properties)* YAML formatında oluşmamış olabilir. Bu dosyayı silip `application.yml` isimli yeni bir dosya oluşturup içeriğini aşağıdaki şekilde düzenleyebiliriz. *(Dosya `src/main/resources` dizininde olmalıdır.)*
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gamerental
+    username: gamerental
+    password: secret
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+```
+
+## Migration Hazırlıkları
+
+Migration işlemleri için `src/main/resources/db/migration` klasöründe `V1__init.sql` isimli bir dosya oluşturacağız. Projemiz için aşağıdaki içeriği kullanabiliriz.
+
+```sql
+CREATE TABLE games (
+    id               UUID         PRIMARY KEY,
+    title            VARCHAR(100) NOT NULL,
+    platform         VARCHAR(50)  NOT NULL,
+    total_copies     INT          NOT NULL,
+    available_copies INT          NOT NULL
+);
+
+CREATE TABLE rentals (
+    id                 UUID          PRIMARY KEY,
+    game_id            UUID          NOT NULL,
+    member_id          UUID          NOT NULL,
+    rented_on          DATE          NOT NULL,
+    due_on             DATE          NOT NULL,
+    returned_on        DATE,
+    status             VARCHAR(20)   NOT NULL,
+    late_fee_amount    NUMERIC(10,2) NOT NULL,
+    late_fee_currency  VARCHAR(3)    NOT NULL
+);
+
+CREATE INDEX idx_rentals_game_id ON rentals (game_id);
+```
+
+DDD tasarımında her aggregate kendi tutarlı bütünlüğünü korumakla sorumludur. Ayrıca, aggregate diğer aggregate'ere ID ile referans verir. Bu nedenle herhangi bir **foreign key constraint** kullanmayacağız. Bu sayede aggregate'ler birbirlerinden bağımsız olacak ve aggregate root'lar kendi aggregate'lerini yönetebilecekler. Zaten **foreign key constraint* kullandığımızda aggregate'ler DB seviyesinde birbirlerinin yaşam döngüsüne bağımlı hale gelirler ve bu DDD tasarımına aykırıdır.
