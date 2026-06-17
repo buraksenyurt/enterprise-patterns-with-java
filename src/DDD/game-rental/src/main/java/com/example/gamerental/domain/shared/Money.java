@@ -49,4 +49,8 @@ public record Money(BigDecimal amount, Currency currency) {
     public boolean isPositive() {
         return amount.signum() > 0;
     }
+
+    public Money times(long multiplier) {
+        return new Money(this.amount.multiply(BigDecimal.valueOf(multiplier)), this.currency);
+    }
 }
