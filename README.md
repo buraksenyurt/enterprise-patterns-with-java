@@ -160,6 +160,10 @@ docker system prune -a --volumes
 # Belli bir imajı silmek istersek
 docker rmi <image_name>
 
+# Tabii ortada çalışan bir konteyner varsa imajı silemezsiniz. O zaman önce konteyneri durdurup silmeniz gerekir. Sonrasında imajı silebiliriz.
+docker stop <container_name>
+docker rm <container_name>
+
 # Sistemdeki tüm veri birimlerini listelemek istersek
 docker volume ls
 

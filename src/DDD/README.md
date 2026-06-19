@@ -213,3 +213,42 @@ curl -i -s -X POST http://localhost:8080/api/rentals/040cf074-9fc2-4480-9cc5-10a
 ```
 
 ![Runtime 03](../../images/Runtime_03.png)
+
+## Testler
+
+Kurumsal çapta bir projenin olmazsa olmazlarından birisi de elbetteki birim testlerdir *(Unit Tests)*. Projedeki testler `test/java/com/example/gamerental` dizininde yer almakta. Bunları çalıştırmak için kök dizindeyken aşağıdaki komutu kullanabiliriz.
+
+```bash
+./mvnw test
+```
+
+![Runtime 04](../../images/Runtime_04.png)
+
+## Sonarqube ile Kod Taraması
+
+Öncelikle docker-compose içerisinde yer alan Sonarqube servisinin çalıştığından emin olalım. `localhost:9000` adresine gidip Sonarqube arayüzüne ulaşabiliyorsak her şey yolunda demektir. Sonrasında aşağıdaki adımları takip edebiliriz.
+
+- `Create a local project` ile ilerleyelim: Project display name ve project key değerlerini **game-rental** olarak belirleyebiliriz. Bir değişiklik yoksa Main branch name değerini **main** olarak bırakabiliriz.
+- `Set up new code for project` adımında **Follows the instance's default** seçeneğini işaretleyip **Create Project** butonuna tıklayalım.
+- `Analysis Method` adımında birkaç seçenek görebiliriz. Bunlar genellikle uzak kod repolarına bağlanabileceğimi alternatiflerdir. Biz local ortamda ilerlediğimiz için **Locally** seçimi ile devam edelim.
+- `Analyze your project` kısmında öncelikle bir proje token'ı üretmemiz gerekiyor. Gerçek hayat senarylarında belirli sürelerde token'ın değiştirilmesi istenir ancak bu eğitim projesinde **Expires in** seçeneğini **No expiration** olarak bırakabiliriz. Token'ı oluşturduktan sonra bir **Continue** butonu ile ilerleyelim.
+- `Run analysis on your project' adımında projemizin Java tabanlı olduğunu belirtmemiz gerekiyor. Örneğimizde build tool olarak Maven kullanıldığı için **Maven** seçeneğini işaretleyelim.
+
+Tüm bu adımları tamamladığımızda elimizde terminal çalıştıracağımız bir komut olacaktır. Bunu yine projenin root klasöründe işletmemiz gerekiyor. *(Token bilgisi az önce üretilen bilgidir ve siz denerken farklı bir token olacaktır.)*
+
+```bash
+mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+  -Dsonar.projectKey=game-rental \
+  -Dsonar.projectName='game-rental' \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.token=sqp_859e5004eaccc5c0bb1b2a7f3ada6b5b0c26ce54
+```
+
+![Sonar Runtime 00](../../images/Sonarqube_00.png)
+
+## Planlar
+
+- [ ] Üye nesnesini gerçek bir aggregate' e dönüştürmek. ÖRneğin bir üye en fazla 3 kiralama yapabilir gibi bir senaryoyu ele almak.
+- [ ] Domain bazlı event'ler eklemek. GameRented, GameReturned gibi event'ler kurgulayıp örneğin bildirim göndermek veya iki aggregate üzerinden transactional bir senaryo kurgulamak.
+- [ ] İkinci bir bounded context' i işin içerisine katmak. Ödeme *(Billing)* olabilir mesela. Renting diye farklı bir bounded context ile de event'ler yardımıyla haberleşebiliriz. DDD'nin stratejik tasarımını sahada deneyimleriz.
+- [ ] Mapping operasyonları için **MapStruct** gibi bir enstrümanı işin içerisine katabiliriz.
