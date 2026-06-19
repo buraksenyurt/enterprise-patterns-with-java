@@ -147,3 +147,69 @@ CREATE INDEX idx_rentals_game_id ON rentals (game_id);
 ```
 
 DDD tasarımında her aggregate kendi tutarlı bütünlüğünü korumakla sorumludur. Ayrıca, aggregate diğer aggregate'ere ID ile referans verir. Bu nedenle herhangi bir **foreign key constraint** kullanmayacağız. Bu sayede aggregate'ler birbirlerinden bağımsız olacak ve aggregate root'lar kendi aggregate'lerini yönetebilecekler. Zaten **foreign key constraint* kullandığımızda aggregate'ler DB seviyesinde birbirlerinin yaşam döngüsüne bağımlı hale gelirler ve bu DDD tasarımına aykırıdır.
+
+## Çalışma Zamanı
+
+Uygulama kodları tamamlandıktan sonra aşağıdaki **maven** komutu ile çalıştırabiliriz. Tabii **postgresql** konteynerinin çalışır durumda olduğundan emin olalım. Komutu projenin kök dizininde işletebiliriz.
+
+```bash
+./mvnw spring-boot:run
+```
+
+Başlangıçta `V1__init.sql` dosyasındaki SQL scriptleri çalışacak ve veritabanında gerekli tablolar oluşturulacaktır. Daha sonra API endpoint'lerine istekler atarak uygulamanın çalıştığını doğrulayabiliriz.
+
+Efsane oyunlardan Super Mario'yu kataloğumuza ekleyelim.
+
+```bash
+curl -X POST http://localhost:8080/api/games \
+  -H "Content-Type: application/json" \
+  -d '{
+        "title": "Super Mario",
+        "platform": "NINTENDO_SWITCH",
+        "totalCopies": 5
+      }'
+```
+
+![Runtime 00](../../images/Runtime_00.png)
+
+ve şimdi de bir oyun kiralayalım. Tabii şimdilik tam bir abonelik sistemimiz olmadığı için abone ID bilgisini kendimiz veriyoruz. Game ID değeri içinse bir önceki denemede eklediğimiz ID değerini kullanabiliriz.
+
+```bash
+curl -s -X POST http://localhost:8080/api/rentals \
+  -H 'Content-Type: application/json' \
+  -d "{\"gameId\":\"3c23c76e-3902-40c6-8424-366196f669ca\",\"memberId\":\"de4b0278-b1fd-4dc1-a05b-2509107fd49b\",\"rentalDays\":10}"
+```
+
+Tabii bunun üzerine kullanbilecek oyun kopya sayısını da kontrol edebiliriz.
+
+```bash
+curl -s http://localhost:8080/api/games/3c23c76e-3902-40c6-8424-366196f669ca
+```
+
+![Runtime 01](../../images/Runtime_01.png)
+
+Şimdi abonemizin oyunu çok sevdiğini ve birkaç gün geç iade ettiğini düşünelim. Bunu simüle etmek için aşağıdaki gibi ilerleyebiriz.
+
+```bash
+# Önce iade tarihini bugünden 15 sonraya ayarlayalım ki gecikme ücreti oluşsun.
+LATE_DATE=$(date -d "+ 15 days" +%F)
+
+# Bu çağrı sonrasında bir gecikme ücreti oluşmasını bekliyoruz.
+curl -s -X POST http://localhost:8080/api/rentals/040cf074-9fc2-4480-9cc5-10a258efe7df/return \
+  -H 'Content-Type: application/json' \
+  -d "{\"returnDate\":\"$LATE_DATE\"}"
+
+# Son olarak oyun bilgilerini tekrar kontrol edelim. Kiralama sona erdiği için kullanılabilir oyun sayısının tekrar 5 olduğunu görmemiz lazım.
+curl -s http://localhost:8080/api/games/3c23c76e-3902-40c6-8424-366196f669ca
+```
+
+![Runtime 02](../../images/Runtime_02.png)
+
+Son olarak birde dükkana geri dönen bir oyunu tekrar döndürmek istediğimiz almamız gereken Conflict hatasına bakalım.
+
+```bash
+curl -i -s -X POST http://localhost:8080/api/rentals/040cf074-9fc2-4480-9cc5-10a258efe7df/return \
+  -H 'Content-Type: application/json' -d '{}'
+```
+
+![Runtime 03](../../images/Runtime_03.png)

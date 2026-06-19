@@ -11,8 +11,8 @@ import com.example.gamerental.domain.shared.Money;
 public class Rental {
     // Kiralama işlemi için geçerli olan para birimi ve günlük gecikme ücretini
     // temsil eden sabitler.
-    private static final Currency TL = Currency.getInstance("TRY");
-    private static final Money DAILY_LATE_FEE = Money.of("2.5", "TL");
+    private static final Currency TRY = Currency.getInstance("TRY");
+    private static final Money DAILY_LATE_FEE = Money.of("2.5", "TRY");
 
     private final RentalId id;
     private final GameId gameId;
@@ -56,7 +56,7 @@ public class Rental {
         // İlk kiralamada gecikme ücreti sıfırdır ve iade tarihi henüz null'dır.
         // Bu nedenle, returnedOn ve lateFee alanlarını null ve sıfır olarak
         // başlatıyoruz.
-        return new Rental(id, gameId, memberId, rentedOn, dueOn, null, RentalStatus.ACTIVE, Money.zero(TL));
+        return new Rental(id, gameId, memberId, rentedOn, dueOn, null, RentalStatus.ACTIVE, Money.zero(TRY));
     }
 
     // Sistemde zaten var olan bir kiralama nesnesini yeniden oluşturmak için
@@ -70,7 +70,7 @@ public class Rental {
     // Gecikme yoksa sıfır tutarında bir Money nesnesi döndürür.
     private Money CalculateLateFee(LocalDate returnedOn) {
         if (!returnedOn.isAfter(dueOn)) {
-            return Money.zero(TL);
+            return Money.zero(TRY);
         }
         long daysLate = java.time.temporal.ChronoUnit.DAYS.between(dueOn, returnedOn);
         return DAILY_LATE_FEE.times(daysLate);
