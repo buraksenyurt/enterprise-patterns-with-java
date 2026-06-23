@@ -26,3 +26,6 @@ replay_pid*
 # IntelliJ IDEA
 .idea/
 .vscode/
+src/DDD/game-rental/nbactions.xml
+/src/EE/Jakarta/begin-jakarta/target/
+/src/EE/Jakarta/hello-world/target/

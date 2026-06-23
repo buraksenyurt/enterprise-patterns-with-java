@@ -29,6 +29,7 @@ code --install-extension vscjava.vscode-java-pack
 - **SOLID Projesi:** SOLID prensiplerinin her biri için ayrı bir alt proje oluşturulmuş durumda. Her alt projede, ilgili prensibin yanlış ve doğru uygulamalarını gösteren örnekler yer alıyor. Bu örnekler prensiplerin neden önemli olduğunu ve nasıl uygulanması gerektiğini anlamaya yardımcı olacaktır.
 - **Design Patterns Projesi:** Bu projede, yazılım geliştirme sürecinde sıkça karşılaşılan problemler için kullanılan tasarım desenlerinden bazıları ele alınacak. Özellikle kurumsal projelerde sık kullanılanlara dair örneklere yer vermeyi planlıyorum.
 - **DDD Projesi:** Domain Driven Design (DDD) temellerinin Spring Boot kullanarak ele alındığı giriş seviyesinde bir Web API projesi. DDD'yi karmaşık bir seviyede ele almayacağız. Yani CQRS *(Command Query Responsibility Segregation)*, Event Sourcing, Message Bus gibi kavramlara bu projede girmeyeceğiz. Bunun yerine ubiquitous language, value objects, entities, aggregates, repositories, clean layering gibi kavramlara odaklanıp Java programlama dilinin nesne yönelimli özelliklerini sahada deneyimlemeye çalışacağız. Hexagonal mimari stilinde bir yapı olacak. [Detaylar için tıklayın](./src/DDD/README.md)
+- **EE Projeleri:** Java Enterprise Edition örneklerinin yer aldığı projeler olabilir. Örneğin Java EE 8 veya Jakarta EE 11 ile geliştirilmiş kurumsal çözümlere yer verebiliriz. [Detaylar için tıklayın](./src/EE/README.md)
 
 > DETAYLAR ZAMANLA EKLENECEK
 
