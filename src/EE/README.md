@@ -96,6 +96,78 @@ Bu komut `hello-world.war` dosyasını deploy ederek sunucuyu başlatacaktır. S
 
 ![jakarta-hello](../../images/JakartaHelloWorld.png)
 
+## Bir Diğer Örnek (Tam Jakarta Uyumlu)
+
+NetBeans tarafında projeyi oluştururken Web Application türünü seçip ilerledim.
+
+| **Alan** | **Değer** |
+| --- | --- |
+| **Project Name** | games-api |
+| **Group Id** | com.lectures.java.games |
+| **Artifact Id** | games-api |
+| **Version** | 1.0-SNAPSHOT |
+| **Archetype** | `jakarta.jakartaee-api` |
+| **Build Final Name** | games-world |
+
+pom.xml;
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.lectures.java.games</groupId>
+    <artifactId>games-api</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>games-api-1.0-SNAPSHOT</name>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jakartaee>11.0.0-M1</jakartaee>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <finalName>games-world</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+Proje çok basit olarak in-memory bir koleksiyonda tutulan bilgisayar oyun bilgilerini döndüren bir REST API sunuyor. Tabii öncelikle projenin temiz bir şekilde build olması gerekiyor. Sonrasında `target` klasöründe oluşan `games-api.war` dosyasını Payara Micro klasöründeki `wars` alt klasörüne kopyalayıp aşağıdaki komutu çalıştırabiliriz.
+
+```bash
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/games-world.war
+
+# Basit bir CURL komutu ile test
+curl http://localhost:8080/games-world/api/games
+```
+
+![Hello World 2](../../images/JakartaHelloWorld2.png)
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
