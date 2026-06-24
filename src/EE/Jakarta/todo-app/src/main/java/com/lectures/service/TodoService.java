@@ -1,11 +1,13 @@
 package com.lectures.service;
 
 import com.lectures.entity.Todo;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 
+@ApplicationScoped
 @Transactional
 public class TodoService {
 
