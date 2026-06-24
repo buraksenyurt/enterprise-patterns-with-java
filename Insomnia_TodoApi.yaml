@@ -30,7 +30,7 @@ collection:
     meta:
       id: req_1fbfd074182143f0a20e047074df7487
       created: 1782306705636
-      modified: 1782307531824
+      modified: 1782311117826
       isPrivate: false
       description: ""
       sortKey: -1782306705636
@@ -39,8 +39,8 @@ collection:
       mimeType: application/json
       text: |-
         {
-        	"task": "Run 5 km on any weekend",
-        	"dueDate": "2026-12-12"
+        	"task": "Walk 15 km on any weekend",
+        	"dueDate":"2026-12-12"
         }
     headers:
       - name: Content-Type
@@ -58,7 +58,7 @@ collection:
     meta:
       id: req_f9e72763d90f4e0084672da1caa35144
       created: 1782306923701
-      modified: 1782306953003
+      modified: 1782311005666
       isPrivate: false
       description: ""
       sortKey: -1782306923701
@@ -104,11 +104,29 @@ collection:
     meta:
       id: req_ab8f27d7cfb843b39860eb3b4afd99bd
       created: 1782307902826
-      modified: 1782307928548
+      modified: 1782311018095
       isPrivate: false
       description: ""
       sortKey: -1782307902826
     method: DELETE
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/todo-app/api/v1/todo/status?id=2
+    name: Complete Task
+    meta:
+      id: req_2f942f5bab6842eea4c10245e3d73664
+      created: 1782310840918
+      modified: 1782311064462
+      isPrivate: false
+      description: ""
+      sortKey: -1782310840918
+    method: POST
     settings:
       renderRequestBody: true
       encodeUrl: true

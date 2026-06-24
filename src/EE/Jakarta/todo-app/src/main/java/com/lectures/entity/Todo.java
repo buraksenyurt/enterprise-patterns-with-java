@@ -1,10 +1,12 @@
 package com.lectures.entity;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 // Plain Old Java Object (POJO)
@@ -15,10 +17,20 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotEmpty(message = "Task cannot be empty")
+    @Size(min = 20, message = "Task should not be less than 20 chars")
+    @Size(max = 50, message = "Task should not be more than 50 chars")
     private String task;
+    
     private LocalDate dateCreated;
+    
+    @NotNull(message = "Due date cannot be empty")
+    @FutureOrPresent(message = "Due date must be in present or feature")
+    @JsonbDateFormat(value = "yyyy-MM-dd")
     private LocalDate dueDate;
+    
     private LocalDate dateCompleted;
+    
     private boolean isCompleted;
 
     @PrePersist

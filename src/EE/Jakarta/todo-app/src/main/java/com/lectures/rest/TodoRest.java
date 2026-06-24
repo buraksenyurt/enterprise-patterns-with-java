@@ -53,4 +53,14 @@ public class TodoRest {
         todoService.deleteTodo(id);
         return Response.noContent().build();
     }
+
+    @Path("status")
+    @POST
+    public Response markAsComplete(@QueryParam("id") Long id) {
+        Todo todo = todoService.findTodoById(id);
+        todo.setIsCompleted(true);
+        todoService.updateTodo(todo);
+
+        return Response.ok(todo).build();
+    }
 }
