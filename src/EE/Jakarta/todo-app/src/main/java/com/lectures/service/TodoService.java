@@ -33,4 +33,11 @@ public class TodoService {
         entityManager.merge(todo);
         return todo;
     }
+
+    public void deleteTodo(Long id) {
+        var todo = findTodoById(id);
+        if (todo != null) {
+            entityManager.remove(todo);
+        }
+    }
 }
