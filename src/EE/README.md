@@ -168,6 +168,19 @@ curl http://localhost:8080/games-world/api/games
 
 ![Hello World 2](../../images/JakartaHelloWorld2.png)
 
+## Todo API
+
+Bu giriş seviyesindeki REST servis örneğinde jakarta'nın CDI *(Contexts and Dependency Injection)* ve JPA *(Java Persistence API)* özelliklerini tam anlamıyla görme şansımız oluyor. Bu seferki örneğimiz Todo işlemleri için yine docker container olarak çalışan PostgreSQL veritabanına bağlanıyor.
+
+```bash
+# WAR dosyası oluştuktan sonra önceki örnekte olduğu gibi Payara Micro sunucusuna deploy edebiliriz.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/todo-app.war
+```
+
+Bu uygulama için örnek HTTP taleplerini Insomnia ile test edebiliriz. [Yaml formatındaki Insomnia çıktısı şurada](../../Insomnia_TodoApi.yaml) Yani bu dosyayı Insomnia'ya import ederek testleri kolayca yapabilirsiniz.
+
+![Insomnia Runtime 00](../../images/InsomniaRuntime_00.png)
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
