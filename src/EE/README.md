@@ -303,6 +303,30 @@ curl -X DELETE "http://localhost:8080/todo-app/api/v1/todo/1"
 curl -X POST "http://localhost:8080/todo-app/api/v1/todo/status?id=2"
 ```
 
+## CDI-Concept Örneği
+
+CDI *(Contexts and Dependency Injection)* kavramını daha iyi anlamak için **cdi-concept** isimli örnek projeyi inceleyebiliriz. Örnek uygulamada aynı arayüzden *(interface)* türeyen iki farklı ödeme yöntemi bileşeninin bir **Qualifier** yardımıyla DI tarafından nasıl çözümlendiği ele alınıyor. Bir arayüzden *(interface)* türeyen farklı implementasyonlar olduğunda CDI, hangi implementasyonun enjekte edileceğini anlamak için Qualifier anotasyonunu kullanır.
+
+> .NET tarafından düşünecek olursak 8nci sürüme kadar factory deseni ile çözdüğümüz, 8 ve sonrasında ise **Keyed Service** kavramı ile üstesinden geldiğimiz duruma benzer. Ancak Java tarafında en başından beri Qualifier anotasyonu ile bu durum çözülmüş.
+
+Örnek uygulamada `CreditCardProcessor` ve `CryptoProcessor` isimli iki farklı ödeme yöntemi bileşeni var. Bu iki bileşen aynı arayüzü implement ediyor ve kullanılan yerlere enjekte ediliyorlar. Özellikle dikkat edelim, **CryptoProcessor** bileşeni `@Crypto` isimli anotasyon ile işaretlenmiş halde. Buna göre asıl servise enjekte edilen bileşen de `@Crypto` anotasyonu ile işaretlenmişse **CryptoProcessor** olarak davranacaktır. Diğer durumdaysa **CreditCardProcessor** ele alınır. Kodlara bakınca durumu daha iyi anlayabiliriz.
+
+Örnek uygulamayı çalıştırmak için önce `cdi-concept.war` dosyasını oluşturup Payara Micro sunucusuna deploy etmemiz gerekiyor.
+
+```bash
+# cdi-concept.war dosyasını oluşturmak için önce projeyi derleyelim.
+mvn clean package
+
+# Sonrasında Payara Micro sunucusuna deploy edelim.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/cdi-concept.war
+```
+
+Yine Insomnia veya curl komutları ile sonuçları test edebiliriz. CreditCardProcessor bileşeni her talepte bir kez oluşturulur. Ancak CryptoProcessor bileşeni uygulama seviyesinde bir kez oluşturulur. Bu `@RequestScoped` ve `@ApplicationScoped` anotasyonları kullanılması halinde CDI' ın nasıl davrandığını da gösterir.
+
+![Insomnia Runtime 01](../../images/InsomniaRuntime_01.png)
+
+Bu arada servis bileşenine enjekte edilen bileşenler için herhangi bir merkezi konumda Scope belirterek bir tanımlama yapmadığımıza dikkat edelim. CDI anotasyonları ile her bileşenin kendi yaşam döngüsü *(Lifecycle)* ve kapsamı *(Scope)* belirlenir ve DI tarafına bildirilir. .NET tarafında genellikle DI servislerine açık bir şekilde bu bildirimlerin yapılması gerekir.
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
