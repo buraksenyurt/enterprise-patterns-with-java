@@ -2,8 +2,7 @@ package com.lectures.interceptor;
 
 /*
 Metotların çalışma zamanlarını ölçmek amaçlı kendi anotasyon türümüz.
-*/
-
+ */
 import jakarta.interceptor.InterceptorBinding;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,5 +16,5 @@ import java.lang.annotation.Target;
 // Çalışma zamanında okunabilmesini sağlıyoruz
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogExecutionTime {
-    
+
 }

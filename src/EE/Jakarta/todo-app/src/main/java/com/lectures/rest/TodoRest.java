@@ -1,8 +1,10 @@
 package com.lectures.rest;
 
 import com.lectures.entity.Todo;
+import com.lectures.event.TodoCreatedEvent;
 import com.lectures.interceptor.LogExecutionTime;
 import com.lectures.service.TodoService;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
@@ -15,6 +17,9 @@ public class TodoRest {
 
     @Inject
     TodoService todoService;
+
+    @Inject
+    private Event<TodoCreatedEvent> todoEvent;
 
     @Path("{id}")
     @GET
@@ -39,6 +44,10 @@ public class TodoRest {
         // api/v1/todo/new
         var created = todoService.createTodo(todo);
         var uri = UriBuilder.fromResource(TodoRest.class).path(created.getId().toString()).build();
+
+        // Todo oluşturulduğunda bunu bildiren bir event fırlatıyoruz
+        todoEvent.fire(new TodoCreatedEvent(created));
+
         return Response.created(uri).build();
     }
 
