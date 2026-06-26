@@ -1,6 +1,7 @@
 package com.lectures.rest;
 
 import com.lectures.entity.Todo;
+import com.lectures.interceptor.LogExecutionTime;
 import com.lectures.service.TodoService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -17,6 +18,7 @@ public class TodoRest {
 
     @Path("{id}")
     @GET
+    @LogExecutionTime
     public Todo getTodo(@PathParam("id") Long id) {
         // api/v1/todo/{id}
         return todoService.findTodoById(id);
@@ -24,6 +26,7 @@ public class TodoRest {
 
     @Path("list")
     @GET
+    @LogExecutionTime
     public List<Todo> getTodos() {
         // api/v1/todo/list
         return todoService.getTodos();
@@ -31,6 +34,7 @@ public class TodoRest {
 
     @Path("new")
     @POST
+    @LogExecutionTime
     public Response createTodo(Todo todo) {
         // api/v1/todo/new
         var created = todoService.createTodo(todo);
@@ -40,6 +44,7 @@ public class TodoRest {
 
     @Path("update")
     @PUT
+    @LogExecutionTime
     public Response updateTodo(Todo todo) {
         // api/v1/todo/update
         todoService.updateTodo(todo);
@@ -48,6 +53,7 @@ public class TodoRest {
 
     @Path("{id}")
     @DELETE
+    @LogExecutionTime
     public Response deleteTodo(@PathParam("id") Long id) {
         // api/v1/todo/{id}
         todoService.deleteTodo(id);
@@ -56,6 +62,7 @@ public class TodoRest {
 
     @Path("status")
     @POST
+    @LogExecutionTime
     public Response markAsComplete(@QueryParam("id") Long id) {
         Todo todo = todoService.findTodoById(id);
         todo.setIsCompleted(true);
