@@ -4,11 +4,17 @@ import com.lectures.entity.Todo;
 import com.lectures.event.TodoCreatedEvent;
 import com.lectures.interceptor.LogExecutionTime;
 import com.lectures.service.TodoService;
+import jakarta.annotation.Resource;
+import jakarta.enterprise.concurrent.ManagedExecutorService;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.container.Suspended;
 import jakarta.ws.rs.core.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Path("todo")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -20,6 +26,24 @@ public class TodoRest {
 
     @Inject
     private Event<TodoCreatedEvent> todoEvent;
+
+    /*
+        Asenkron versiyon kullanımında WELD taraında aşağıdaki hatalar alınabilir.
+    
+     org.jboss.weld.exceptions.WeldException: WELD-001524: UnabletoloadproxyclassforbeanManagedBean[
+    classorg.glassfish.jersey.ext.cdi1x.transaction.internal.WebAppExceptionHolder
+]withqualifiers[
+    
+    @WaeQualifier@Any
+]withclassclassorg.glassfish.jersey.ext.cdi1x.transaction.internal.WebAppExceptionHolder 
+    
+    Bu nedenle thread yönetimini Java ortamından değil de uygulama sunucusundan
+    (bu örnek için Payara) talep etmemiz gerekiyor. Söz konusu resource'un
+    getTodoAsync metodunda parametre olarak nasıl kullanıldığına dikkat edelim.
+    
+    */
+    @Resource
+    private ManagedExecutorService managedExecutor;
 
     @Path("{id}")
     @GET
@@ -35,6 +59,22 @@ public class TodoRest {
     public List<Todo> getTodos() {
         // api/v1/todo/list
         return todoService.getTodos();
+    }
+
+    @Path("async/list")
+    @GET
+    public void getTodoAsync(@Suspended final AsyncResponse asyncResponse) {
+        // api/v1/todo/async/list
+        CompletableFuture.supplyAsync(() -> {
+            return todoService.getTodos();
+        }, managedExecutor).thenAccept(result -> {
+            asyncResponse.resume(Response.ok(result).build());
+        }
+        ).exceptionally(ex -> {
+            asyncResponse.resume(Response.serverError().entity(ex.getMessage()).build());
+            return null;
+        });
+
     }
 
     @Path("new")

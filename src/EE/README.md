@@ -186,7 +186,7 @@ curl http://localhost:8080/games-world/api/games
 
 ![Hello World 2](../../images/JakartaHelloWorld2.png)
 
-## Todo API
+## Todo API (Daha iyi bir başlangıç)
 
 Bu giriş seviyesindeki REST servis örneğinde jakarta'nın CDI *(Contexts and Dependency Injection)* ve JPA *(Java Persistence API)* özelliklerini tam anlamıyla görme şansımız oluyor. Bu seferki örneğimiz Todo işlemleri için yine docker container olarak çalışan PostgreSQL veritabanına bağlanıyor.
 
@@ -195,7 +195,14 @@ Bu giriş seviyesindeki REST servis örneğinde jakarta'nın CDI *(Contexts and 
 java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/todo-app.war
 ```
 
-Bu uygulama için örnek HTTP taleplerini Insomnia ile test edebiliriz. [Yaml formatındaki Insomnia çıktısı şurada](../../Insomnia_TodoApi.yaml) Yani bu dosyayı Insomnia'ya import ederek testleri kolayca yapabilirsiniz.
+Genel olarak aşağıdaki kavramları ele aldık;
+
+- **CDI Bağımlılık Enjeksiyonu:** `@Inject` anotasyonu ile bileşenler arasında gevşek bağlılık *(Loosely Coupled)* sağlanır. TodoService ve Event gibi bileşenler otomatik olarak uygun yerlere enjekte edilir.
+- **JAX-RS REST Endpointleri:** HTTP metodları (GET, POST, PUT, DELETE) ve URL yolları (`@Path`) aracılığıyla REST servisleri tanımlanır. Request ve response veriler JSON formatında işlenir.
+- **JPA Entity'leri:** Veritabanı tabloları nesne-yönelimli bir şekilde temsil edilir. Todo Entity ORM aracılığıyla PostgreSQL'e eşleştirilir.
+- **CDI Event Gözleme (Observer Pattern):** TodoCreatedEvent fırlatıldığında, TodoNotificationObserver otomatik olarak ayağa kaldırılır ve event'i işler. Sistem bileşenleri arasında düşük bağımlılıklı *(Loosely Coupled)* haberleşme sağlanır.
+- **CDI Interceptor'lar:** LogExecutionTime anotasyonu kullanılan metodlar Aspect Oriented yaklaşımı ile çevrelenir ve çalışma süresi otomatik olarak ölçülür. Cross-cutting concerns implementasyonunun temiz bir uygulanış biçimidir.
+- **Asenkron İşlemler:** JAX-RS async desteği (`@Suspended`, AsyncResponse, CompletableFuture) ve ManagedExecutorService ile uzun süreli *(long-running)* operasyonlar bloklanmadan *(non-blocking)* gerçekleştirilir. ManagedExecutorService, Jakarta EE container tarafından yönetilen bir thread havuzudur ve uygulama sunucusunun *(Payara gibi)* context'e erişip thread yönetimini üstlenmesini sağlar.
 
 ### Pom *(Project Object Model)* İçeriği Hakkında
 
@@ -259,9 +266,11 @@ Jakarta için giriş niteliğindeki bu proje tipik olarak JPA, CDI ve JAX-RS yap
 
 ### Todo API için Testler
 
+Örnek HTTP taleplerini Insomnia ile çalıştırabiliriz. [Yaml formatındaki Insomnia çıktısı şurada](../../Insomnia_TodoApi.yaml) Yani bu dosyayı Insomnia'ya import ederek testleri kolayca yapabilirsiniz.
+
 ![Insomnia Runtime 00](../../images/InsomniaRuntime_00.png)
 
-Insomnia ile de test edebileceğimiz bazı örnek HTTP talepleri aşağıdaki bulabiliriz. Burada `localhost:8080` adresi Payara Micro sunucusunun çalıştığı adres ve porttur.
+Insomnia ile de test edebileceğimiz HTTP taleplerini terminalden curl komutu ile de işletebiliriz. Burada `localhost:8080` adresi Payara Micro sunucusunun çalıştığı adres ve porttur.
 
 ```bash
 # 1. Tüm Todo'ları Listele (GET)
