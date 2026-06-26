@@ -50,7 +50,7 @@ Nelere ihtiyacımız var?
 - [NetBeans IDE](https://netbeans.apache.org/front/main/index.html), [Eclipse IDE](https://www.eclipse.org/downloads/) veya [Visual Studio Code](https://code.visualstudio.com/) gibi kod geliştirme aracı.
 - [Insomnia](https://insomnia.rest/) veya [Postman](https://www.postman.com/) gibi REST API test araçları.
 - [Apache Maven](https://maven.apache.org/) veya [Gradle](https://gradle.org/) gibi proje yönetim ve derleme araçları.
-- [Payara Micro Server](https://payara.fish/products/payara-micro/) Micro service suncusu olarak kullanabiliriz. Hafifsiklet bir web sunucusu olarak düşünebiliriz.
+- [Payara Micro Server](https://payara.fish/products/payara-micro/) Micro service suncusu olarak kullanabiliriz. Hafifsiklet bir web sunucusu olarak düşünebiliriz. .NET Core ile hayatımıza giren Kestrel web sunucusuna benzetebiliriz. Özünde Payara Micro, Jakarta EE spesifikasyonlarını implement eden bir uygulama sunucusudur ve özellikle mikro servis mimarileri için tercih edilir.
 
 Kendi Ubuntu sistemimde `Insomnia` kurulumunda sorun çıktı. Aşağıdaki şekilde kurabildim.
 
@@ -59,13 +59,15 @@ wget --content-disposition https://updates.insomnia.rest/downloads/ubuntu/latest
 sudo apt install ./Insomnia*.deb
 ```
 
-Benzer şekilde `Payara Micro` sunucusunu çalıştırırken de IPv6 ile ilgili bir hata aldım. Burada IPv4 kullanmak için aşağıdaki komutu kullanabilirsiniz.
+Benzer şekilde `Payara Micro` sunucusunu çalıştırırken de IPv6 ile ilgili bir hata aldım. Burada IPv4 kullanmaya zorlamak için aşağıdaki komutu kullanabiliriz.
 
 ```bash
 # Payara Micro 7.2026.5.jar içeriğini indirdiğim klasörde çalıştırıyorum.
 java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar
 # Sonrasında 8080 portu üzerinden sunucuya erişebilirsiniz.
 ```
+
+> `Djava.net.preferIPv4Stack=true` parametresi JVM'e IPv4 protokolünü tercih etmesini söyler. Java çalışma zamanı Linux ortamlarında bazen ısrarla IPv6 kullanmaya çalışır. Özellikle ortam sadece IPv4'e göre ayarlanmışsa ya da sadece onu destekliyorsa, uygulama portu dinleyemez ve BindException gibi hatalar fırlatır. Ya da PostgreSQL gibi servislerle iletişim kurarken Timeout hataları alınır. Bu parametre ile JVM'e IPv4 kullanmasını zorunlu kılarak hataların önüne geçebiliriz.
 
 ## Hello World Uygulaması
 
@@ -195,7 +197,102 @@ java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy war
 
 Bu uygulama için örnek HTTP taleplerini Insomnia ile test edebiliriz. [Yaml formatındaki Insomnia çıktısı şurada](../../Insomnia_TodoApi.yaml) Yani bu dosyayı Insomnia'ya import ederek testleri kolayca yapabilirsiniz.
 
+### Pom *(Project Object Model)* İçeriği Hakkında
+
+Jakarta için giriş niteliğindeki bu proje tipik olarak JPA, CDI ve JAX-RS yapılarının en temel halini kullanıyor. POM dosyası içeriğine göre söyleyebileceğimiz birçok şey var. Önce içeriğe bakalım.
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.lectures</groupId>
+    <artifactId>todo-app</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>todo-app-1.0-SNAPSHOT</name>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jakartaee>11.0.0-M1</jakartaee>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+         <finalName>todo-app</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+- **`jakarta.jakartaee-api` için scoped bildirimi:** Maven'a sadece Jakarta EE arayüzlerini kullanacağımızı ve uygulama sunucusunun bu arayüzlerin implementasyonlarını sağlayacağını söylüyoruz. Kodun derlenmesi için bu arayüzler gerekli ancak derlenmiş çıktıya dahil edilmeyecekler *(yani WAR dosyasına)* Zira uygulamanın çalıştırılacağı sunucu *(ki burada Payara Micro'yu kullandık)* gerekli motorları *(Hibernate, RESTEasy, Weld vb)* bize çalışma zamanında sağlayacak. Bu yaklaşıma göre WAR dosyası sadee yazdığımı iş mantığını *(business logic)* barındıracaktır ve boyut olarak da çok küçük kalacaktır. Oldukça temiz ve izole bir mimari elde ediyoruz diyebilirim.
+- **`postgresql` bağımlılığı:** JDBC sürücüsü olarak PostgreSQL veritabanına bağlanmak için `org.postgresql` isimli bağımlılığı ekledik. Bu sürücü, JPA implementasyonunu yapmaktadır ve veritabanı ile iletişim kurmamızı sağlar. Önceki maddede belirttiğimiz üzere bu bağımlılık **scoped** olarak belirtilmediği için WAR dosyasına dahil edilir. Bu sayede uygulama sunucusu çalıştırıldığında gerekli sürücü de WAR dosyası ile birlikte yüklenir. Uygulama sunucusunda bu sürücü mevcut olmasa bile uygulama çalışır. Burada scoped olma ve olmama halini betimlemek için de kullandık. Bu arada veritabanı bağlantı ayarlarımız `src/main/resources/META-INF/persistence.xml` dosyasında yer alıyor. Bu dosya JPA'nın konfigürasyon dosyasıdır.
+- **Jakarta EE 11.0.0-M1 sürümü:** Projeyi yazdığım tarih itibariyle kullanılan sürüm. Jakarta EE 11'in ilk milestone sürümü. Bu sürümde JPA 3.1, CDI 4.0, JAX-RS 3.1 gibi yeni versiyonlar yer alıyor.
+- **Java 21 sürümü:** Projeyi yazdığım tarih itibariyle kullanılan Java sürümü. Normalde makinede Java 25 yüklü ancak Payara Micro 7.2026.5 sürümünün Java 21 ile uyumlu olduğu yazıyordu. Bu nedenle derleme ve çalıştırma için Java 21 kullanıyoruz.
+
+### Todo API için Testler
+
 ![Insomnia Runtime 00](../../images/InsomniaRuntime_00.png)
+
+Insomnia ile de test edebileceğimiz bazı örnek HTTP talepleri aşağıdaki bulabiliriz. Burada `localhost:8080` adresi Payara Micro sunucusunun çalıştığı adres ve porttur.
+
+```bash
+# 1. Tüm Todo'ları Listele (GET)
+curl -X GET "http://localhost:8080/todo-app/api/v1/todo/list"
+
+# 2. Yeni Todo Oluştur (POST)
+
+curl -X POST "http://localhost:8080/todo-app/api/v1/todo/new" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "task": "Walk 15 km on any weekend",
+    "dueDate": "2026-12-12"
+  }'
+
+# 3. ID'ye Göre Todo Getir (GET)
+curl -X GET "http://localhost:8080/todo-app/api/v1/todo/1"
+
+# 4. Todo'yu Güncelle (PUT)
+curl -X PUT "http://localhost:8080/todo-app/api/v1/todo/update" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": 1,
+    "isCompleted": true
+  }'
+
+# 5. Todo'yu Sil (DELETE)
+curl -X DELETE "http://localhost:8080/todo-app/api/v1/todo/1"
+
+# 6. Todo'yu Tamamlandı Olarak İşaretle (POST)
+curl -X POST "http://localhost:8080/todo-app/api/v1/todo/status?id=2"
+```
 
 ## FAQ
 
