@@ -359,6 +359,111 @@ curl -X POST http://localhost:8080/inventory-events-service-1.0-SNAPSHOT/api/inv
      -d '{"id": "SMF-001", "name": "Super Mario", "stockQuantity": 150}'
 ```
 
+### Rabbit MQ ile Event Tabanlı Haberleşme
+
+Uygulama kodlarına göre RabbitMq tarafından `figure.exchange` isimli bir topic otomatik olarak oluşur ve Exchanges kısmından gözlemlenebilir. Mesajları da görmek için bir kuyruk oluşturup bu exchange'e bind edebiliriz. Örneğin `figures.debug.q` isimli bir kuyruk oluşturup `figure.exchange` ile bind edebiliriz. Kuyruğu, `Queues and Streams` sekmesinden oluşturabiliriz. Type olarak classic seçilebilir ve durable olarak işaretlenebilir. Sonrasında `Bindings` sekmesinden `figure.exchange` ile bind edebiliriz. Bu sayede kuyruk, exchange'den gelen mesajları alır ve gözlemlenebilir. Bind kısmında `Routing Key` olarak `figure.#` şeklinde bir desen kullanabiliriz ya da bu örneğe özel `figure.stock.arrived` gibi bir key de kullanabiliriz. Bu sayede sadece bu key ile gelen mesajlar kuyruk tarafından alınır. Eğer işler yolunda giderse `localhost:15672` adresinden Rabbit MQ yönetim paneline girip `Queues and Streams` sekmesinden `figures.debug.q` kuyruğunu seçtiğimizde gelen mesajları görebiliriz.
+
+![Rabbit Runtime 00](../../images/RabbitRuntime_00.png)
+
+## Logları OpenObserve ile İzlemek
+
+Uygulamayı buraya kadarki haliyle çalıştırdığımızda OpenObserve üzerinde bir log düşmediğini görürüz. Bunun için oluşan logları örneğin `fluent-bit` gibi bir enstrüman ile OpenObserve'a yönlendirmemiz gerekir. Ben docker kullandığım için gerekli ayarları yine docker-compose üzerinden yaptım ama ekstra bazı konfigurasyon işlemleri de gerekti. Önce docker-compose'un durumuna bakalım.
+
+```yml
+fluent-bit:
+    image: fluent/fluent-bit:latest
+    container_name: jakarta-fluent-bit
+    volumes:
+      - /home/buraks/payara-micro/logs:/var/log/payara:ro
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+      - ./parsers.conf:/fluent-bit/etc/parsers.conf:ro
+    networks:
+      - spring-network
+```
+
+Burada dikkat edilmesi gereken birkaç nokta var. Öncelikle `fluent-bit` container'ı için bir volume tanımladık. Bu volume, host makinedeki `/home/buraks/payara-micro/logs` dizinini container içindeki `/var/log/payara` dizinine bağlar. Bu sayede Payara Micro tarafından üretilen log dosyaları, Fluent Bit container'ı tarafından okunabilir hale gelir. Ayrıca `fluent-bit.conf` ve `parsers.conf` dosyalarını da container içine mount ettik. Bu dosyalar Fluent Bit'in nasıl çalışacağını ve logları nasıl parse edeceğini belirler. İçerikleri de şöyledir ve docker-compose ile aynı dizinde yer almaktadırlar.
+
+`fluent-bit.conf` içeriği;
+
+```conf
+[SERVICE]
+    Flush         1
+    Log_Level     info
+    Parsers_File  parsers.conf
+
+[INPUT]
+    Name              tail
+    Path              /var/log/payara/server.log
+    Tag               payara.*
+    Parser            payara_json
+    Refresh_Interval  5
+
+[OUTPUT]
+    Name          http
+    Match         payara.*
+    Host          openobserve
+    Port          5080
+    URI           /api/default/payara_logs/_json
+    Format        json
+    http_User     admin@example.com
+    http_Passwd   ComplexPassword123!
+    tls           off
+```
+
+Bu dosyadaki bölümlere bir değerlendirelim.
+
+- `[SERVICE]` bölümü Fluent Bit servisinin genel ayarlarını içerir.
+  - `Flush` parametresi logların ne sıklıkla işleneceğini belirler.
+  - `Log_Level` parametresi loglama seviyesini belirler.
+  - `Parsers_File` parametresi ise logların parse edilmesi için kullanılacak parser dosyasını belirtir.
+- `[INPUT]` bölümü logların nereden alınacağını ve nasıl parse edileceğini belirler.
+  - `Name` parametresi input plugin'ini belirtir. `tail` eklentisi log dosyasının sonuna eklenen yeni logları takip edeceğimizi ifade ediyor.
+  - `Path` parametresi log dosyasının yolunu belirtir. Burada Payara Micro tarafından üretilen `server.log` dosyasını takip ediyoruz ki bunun içeriği de Java uygulamamızdan gelen logları içeriyor.
+  - `Tag` parametresi loglara bir etiket ekler. Bu etiket, output bölümünde hangi logların işleneceğini belirlemek için kullanılır.
+  - `Parser` parametresi logların parse edilmesi için kullanılacak parser'ı belirtir. Burada `payara_json` parser'ını kullanıyoruz.
+  - `Refresh_Interval` parametresi log dosyasının ne sıklıkla kontrol edileceğini belirler.
+- `[OUTPUT]` bölümü logların nereye gönderileceğini ve nasıl formatlanacağını belirler.
+  - `Name` parametresi output plugin'ini belirtir. `http` eklentisi logları bir HTTP endpoint'ine göndereceğimizi ifade ediyor.
+  - `Match` parametresi hangi logların bu output'a gönderileceğini belirler. Burada `payara.*` etiketi ile işaretlenmiş loglar gönderilecek.
+  - `Host`, `Port`, `URI` parametreleri logların gönderileceği OpenObserve servisinin adresini ve endpoint'ini belirtir.
+  - `Format` parametresi logların hangi formatta gönderileceğini belirtir. Burada JSON formatını kullanıyoruz.
+  - `http_User`, `http_Passwd` parametreleri OpenObserve servisinin kimlik doğrulama bilgilerini içerir.
+  - `tls` parametresi TLS kullanımını belirler. Burada TLS kapalı.
+
+`parsers.conf` içeriği;
+
+```conf
+[PARSER]
+    Name    payara_json
+    Format  json
+```
+
+Tabii bu tamamen benim sistemime özel bir çözüm. Payara-micro sürümünü kullandığım için onunla ilgli de bir ayarlama yapmak gerekti. Bunun için payara-micro'nun kurulduğu klasöre birde `logging.properties` isimli aşağıdaki içeriğe sahip dosya eklendi.
+
+```text
+handlers=java.util.logging.FileHandler,java.util.logging.ConsoleHandler
+
+java.util.logging.FileHandler.pattern=/home/buraks/payara-micro/logs/server.log
+java.util.logging.FileHandler.formatter=fish.payara.enterprise.server.logging.JSONLogFormatter
+java.util.logging.FileHandler.limit=10000000
+java.util.logging.FileHandler.count=1
+java.util.logging.FileHandler.append=true
+java.util.logging.FileHandler.level=INFO
+
+java.util.logging.ConsoleHandler.formatter=com.sun.enterprise.server.logging.ODLLogFormatter
+java.util.logging.ConsoleHandler.level=FINE
+
+.level=INFO
+```
+
+Aslında burada iki handler tanımı görüyoruz. Birisi `FileHandler` diğeri ise `ConsoleHandler`. ConsoleHandler, logları konsola yazdırır ve OpenObserve ile ilgisi yoktur. FileHandler ise logları `server.log` isimli dosyaya yazdıracak şekilde ayarlanmıştır ve OpenObserve ile ilgilidir. Dikkat çekici bir diğer nokta ise FileHandler formatter bileşeninin `fish.payara.enterprise.server.logging.JSONLogFormatter` olarak ayarlanmasıdır. Bu sayede loglar JSON formatında yazdırılır ve Fluent Bit tarafından parse edilebilir hale gelir.
+
+Bu ayarlamalar sonrası yaptığım denemelerde logların OpenObserve üzerine aktığını gördüm. Arabirimde `payara_logs` isimli bir stream oluştu.
+
+![OpenObserveRuntime_00](../../images/OpenObserveRuntime_00.png)
+
+Ancak elbette bu kendi Ubuntu sistemimde kurguladığım çözüm. Bir Payara Server kurulduğunda buradaki ayarlar farklılık gösterebilir. Yine de işin teorisini kavramak önemli. Uygulama loglarını OpenObserve üzerinde görmek için Fluent Bit gibi bir log forwarder kullanmak gerekiyor. Fluent Bit, logları toplar, parse eder ve OpenObserve'a gönderir. Bu sayede uygulama loglarını merkezi bir şekilde izleyebiliriz.
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.

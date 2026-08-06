@@ -63,6 +63,16 @@ services:
     networks:
       - spring-network
 
+  fluent-bit:
+    image: fluent/fluent-bit:latest
+    container_name: jakarta-fluent-bit
+    volumes:
+      - /home/buraks/payara-micro/logs:/var/log/payara:ro
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+      - ./parsers.conf:/fluent-bit/etc/parsers.conf:ro
+    networks:
+      - spring-network
+
 
 volumes:
   postgres_data:
@@ -70,6 +80,7 @@ volumes:
   sonarqube_logs:
   sonarqube_extensions:
   openobserve_data:
+  fluent_bit_data:
 
 networks:
   spring-network:
