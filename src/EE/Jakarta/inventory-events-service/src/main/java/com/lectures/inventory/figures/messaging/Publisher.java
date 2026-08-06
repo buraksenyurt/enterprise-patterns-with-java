@@ -5,6 +5,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
+@ApplicationScoped
 public class Publisher {
     private static final Logger logger = LoggerFactory.getLogger(Publisher.class);
     private static final String EXCHANGE_NAME = "figure.exchange";
