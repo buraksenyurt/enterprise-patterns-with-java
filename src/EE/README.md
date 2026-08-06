@@ -458,7 +458,15 @@ java.util.logging.ConsoleHandler.level=FINE
 
 Aslında burada iki handler tanımı görüyoruz. Birisi `FileHandler` diğeri ise `ConsoleHandler`. ConsoleHandler, logları konsola yazdırır ve OpenObserve ile ilgisi yoktur. FileHandler ise logları `server.log` isimli dosyaya yazdıracak şekilde ayarlanmıştır ve OpenObserve ile ilgilidir. Dikkat çekici bir diğer nokta ise FileHandler formatter bileşeninin `fish.payara.enterprise.server.logging.JSONLogFormatter` olarak ayarlanmasıdır. Bu sayede loglar JSON formatında yazdırılır ve Fluent Bit tarafından parse edilebilir hale gelir.
 
-Bu ayarlamalar sonrası yaptığım denemelerde logların OpenObserve üzerine aktığını gördüm. Arabirimde `payara_logs` isimli bir stream oluştu.
+Bu ayarlamalar sonrası yaptığım denemelerde logların OpenObserve üzerine aktığını gördüm. Lakin yine bir workaround gerekti. Payara-micro server'ı başlatırken aşağıdaki gibi açıkça hangi loglama özelliklerini kullanacağını belirtmek gerekiyor.
+
+```bash
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar \
+  --deploy wars/inventory-events-service-1.0-SNAPSHOT.war \
+  --logproperties /home/buraks/payara-micro/logging.properties
+```
+
+Sonrasında OpenObserve arabiriminde `payara_logs` isimli bir stream oluştuğunu ve içeriğine ulaşabildiğimi gördüm.
 
 ![OpenObserveRuntime_00](../../images/OpenObserveRuntime_00.png)
 
