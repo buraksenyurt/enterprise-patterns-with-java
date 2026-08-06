@@ -40,12 +40,36 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_extensions:/opt/sonarqube/extensions
+  
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: jakarta-rabbitmq
+    ports:
+      - "5672:5672"    # AMQP portu
+      - "15672:15672"  # Yönetim paneli (guest/guest)
+    networks:
+      - spring-network
+  
+  openobserve:
+    image: public.ecr.aws/zinclabs/openobserve:latest
+    container_name: jakarta-openobserve
+    environment:
+      - ZO_ROOT_USER_EMAIL=admin@example.com
+      - ZO_ROOT_USER_PASSWORD=ComplexPassword123!
+    ports:
+      - "5080:5080"
+    volumes:
+      - openobserve_data:/data
+    networks:
+      - spring-network
+
 
 volumes:
   postgres_data:
   sonarqube_data:
   sonarqube_logs:
   sonarqube_extensions:
+  openobserve_data:
 
 networks:
   spring-network:

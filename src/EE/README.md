@@ -175,7 +175,7 @@ pom.xml;
 </project>
 ```
 
-Proje çok basit olarak in-memory bir koleksiyonda tutulan bilgisayar oyun bilgilerini döndüren bir REST API sunuyor. Tabii öncelikle projenin temiz bir şekilde build olması gerekiyor. Sonrasında `target` klasöründe oluşan `games-api.war` dosyasını Payara Micro klasöründeki `wars` alt klasörüne kopyalayıp aşağıdaki komutu çalıştırabiliriz.
+Proje çok basit olarak **in-memory** bir koleksiyonda tutulan bilgisayar oyun bilgilerini döndüren bir REST API sunuyor. Tabii öncelikle projenin temiz bir şekilde build olması gerekiyor. Sonrasında `target` klasöründe oluşan `games-api.war` dosyasını Payara Micro klasöründeki `wars` alt klasörüne kopyalayıp aşağıdaki komutu çalıştırabiliriz.
 
 ```bash
 java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/games-world.war
@@ -326,6 +326,38 @@ Yine Insomnia veya curl komutları ile sonuçları test edebiliriz. CreditCardPr
 ![Insomnia Runtime 01](../../images/InsomniaRuntime_01.png)
 
 Bu arada servis bileşenine enjekte edilen bileşenler için herhangi bir merkezi konumda Scope belirterek bir tanımlama yapmadığımıza dikkat edelim. CDI anotasyonları ile her bileşenin kendi yaşam döngüsü *(Lifecycle)* ve kapsamı *(Scope)* belirlenir ve DI tarafına bildirilir. .NET tarafında genellikle DI servislerine açık bir şekilde bu bildirimlerin yapılması gerekir.
+
+## Figures Api *(Event Kullanımı Örneği)*
+
+Bu örnekte kahramanımız çizgi karakter figürleri ile ilgili stok yönetimi yapan bir servis. Pek tabii tüm domain'i ele almıyor. Sadece bir JAX-RS uyarlamasında stoğa yeni bir figüre geldiğinde dış dünyaya *(ki bu senaryoda Rabbit MQ)* bir event fırlatıyor. Jakarta türevli uygulama CDI tabanlı ve yine Payara Platformu üzerinden çalışmakta. Amaç kurumsal çözümlerde önemli kavramlardan birisi olan domain ile ilgili değişikliklerde dış sistemleri bilgilendirmek için kullanılan event tabanlı haberleşme *(Event Driven Communication)* kavramını göstermek. Bİzim senaryomuzda Rabbit MQ kullanılıyor. Ayrıca loglama için de [OpenObserve](https://github.com/openobserve/openobserve) isimli bir ürün kullanılıyor. Tüm bu servisler docker container olarak işletilmekte. *([docker-compose](../../docker-compose.yml) dosyasının son haline bakınız)*
+
+Uygulamanın bağımlılıkları arasında rabbitmq-client ve OpenObserve için gerekli kütüphaneler yer almakta. Bu bağımlılıklar da `pom.xml` dosyasında yer almakta. Loglama alt yapısında **Simple Logging Facade for Java (SLF4J)** kullanılıyor. [SLF4J](https://github.com/qos-ch/slf4j), farklı loglama framework'lerini soyutlayan bir arayüz sağlar. Bu sayede uygulama kodu loglama framework'ünden bağımsız olur ve farklı loglama implementasyonları kolayca değiştirilebilir. Örnekte sdk türevi kullanılıyor. Buna göre loglama çağrıları `java.util.logging` kütüphanesine bağlanır. Payara kendi loglama altyapısını JUL *(Java Util Logging)* üzerine kurmuştur. Bu sayede loglama çağrıları Payara'nın loglama altyapısına yönlendirilir ve loglar konsola veya dosyaya yazdırılabilir.
+
+### Annotated Modu
+
+Projenin `WEB-INF` altında yer alan `beans.xml` dosyasında `bean-discovery-mode` özelliği **annotated** olarak ayarlanmıştır. Bu mod sadece CDI anotasyonları ile işaretlenmiş sınıfların taranmasını *(bean olarak algılanmasını)* sağlar. Bu sayede gereksiz sınıfların taranması engellenir ve uygulama performansı artırılır. Örneğin `@ApplicationScoped`, `@RequestScoped`, `@Inject` gibi anotasyonlar ile işaretlenmiş sınıflar CDI tarafından taranır ve yönetilir.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="https://jakarta.ee/xml/ns/jakartaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/beans_4_0.xsd"
+       bean-discovery-mode="annotated">
+</beans>
+```
+
+Buradaki sihir şudur; Uygulamayı dağıtacağımız **Payara** veya benzer uygulama sunucuları *(Application Servers)* bir kaynak motoruna sahiptir. Bu literatürde **WELD Engine** olarak da geçer. Bu motor CDI*(Contexts and Dependency Injection)* kural kitabına göre eklenmiş bağımlılıkları *(Dependencies)* tarar ve yönetir. Bu sayede uygulama geliştiricisi sadece iş mantığını yazar ve bağımlılıkların yönetimi CDI kitabındaki kuralları gerçekleyen bu motor tarafından yapılır. XML dosyasındaki `bean-discovery-mode` değerini okuyan bu motordur. **WildFly, JBoss EAP, GlassFish, Payara** gibi uygulama sunucuları bu motoru kendi içlerinde barındırırlar.
+
+Projeyi çalıştırıp test etmek için **target** klasöründe oluşan `inventory-events-service-1.0-SNAPSHOT.war` dosyasını **Payara Micro** sunucusuna deploy edebiliriz. Sonrasında **Insomnia** veya **curl** komutları ile test edebiliriz.
+
+```bash
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/inventory-events-service-1.0-SNAPSHOT.war
+
+# Servis ayağa kalktıktan sonra aşağıdaki curl komutları ile test edebiliriz.
+curl -X POST http://localhost:8080/inventory-events-service-1.0-SNAPSHOT/api/inventory/stock-arrival \
+     -H "Content-Type: application/json" \
+     -d '{"id": "SMF-001", "name": "Super Mario", "stockQuantity": 150}'
+```
 
 ## FAQ
 
