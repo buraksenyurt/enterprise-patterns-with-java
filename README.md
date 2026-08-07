@@ -31,8 +31,6 @@ code --install-extension vscjava.vscode-java-pack
 - **DDD Projesi:** Domain Driven Design (DDD) temellerinin Spring Boot kullanarak ele alındığı giriş seviyesinde bir Web API projesi. DDD'yi karmaşık bir seviyede ele almayacağız. Yani CQRS *(Command Query Responsibility Segregation)*, Event Sourcing, Message Bus gibi kavramlara bu projede girmeyeceğiz. Bunun yerine ubiquitous language, value objects, entities, aggregates, repositories, clean layering gibi kavramlara odaklanıp Java programlama dilinin nesne yönelimli özelliklerini sahada deneyimlemeye çalışacağız. Hexagonal mimari stilinde bir yapı olacak. [Detaylar için tıklayın](./src/DDD/README.md)
 - **EE Projeleri:** Java Enterprise Edition örneklerinin yer aldığı projeler olabilir. Örneğin Java EE 8 veya Jakarta EE 11 ile geliştirilmiş kurumsal çözümlere yer verebiliriz. [Detaylar için tıklayın](./src/EE/README.md)
 
-> DETAYLAR ZAMANLA EKLENECEK
-
 ## Design Patterns
 
 Yardımcı diagramlar.
@@ -48,6 +46,10 @@ Yardımcı diagramlar.
 ### Behavioral Patterns - Command Pattern
 
 ![Command Pattern](./images/CommandPatternUml.png)
+
+### Behavioral Patterns - Strategy Pattern
+
+![Strategy Pattern](./images/StrategyPatternUml.png)
 
 ## Yardımcı Kaynaklar
 
