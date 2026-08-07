@@ -472,6 +472,117 @@ Sonrasında OpenObserve arabiriminde `payara_logs` isimli bir stream oluştuğun
 
 Ancak elbette bu kendi Ubuntu sistemimde kurguladığım çözüm. Bir Payara Server kurulduğunda buradaki ayarlar farklılık gösterebilir. Yine de işin teorisini kavramak önemli. Uygulama loglarını OpenObserve üzerinde görmek için Fluent Bit gibi bir log forwarder kullanmak gerekiyor. Fluent Bit, logları toplar, parse eder ve OpenObserve'a gönderir. Bu sayede uygulama loglarını merkezi bir şekilde izleyebiliriz.
 
+## Inventory Notification Service
+
+Bu uygulama Inventory Service tarafından fırlatılan event'lerin RabbitMQ üzerinden dinlenmesini sağlıyor. Bir nevi consumer rolünü üstlendiğini söyleyebiliriz. Yine benzer prensiplerle geliştirilen ama farklı olarak consumer rolünü üstlenen deneysel bir REST Api uygulaması söz konusu. Her zaman olduğu gibi bu uygulamayı çalıştırmak içinde `inventory-notification-service-1.0` dosyasını Payara Micro sunucusuna deploy etmemiz gerekiyor. Sonrasında Insomnia veya curl komutları ile test edebiliriz.
+
+### Nasıl Test Edebiliriz?
+
+Her iki uygulamayı da `payara-micro` sunucusunda deploy ederek çalıştırıyorum. Dolayısıyla port çakışması olası. Bu nedenle örnekleri başlatırken açıkça port belirtmek gerekiyor. Aşağıdaki terminal komutları ile ilerleyebiliriz.
+
+```bash
+# Inventory Service uygulamasını 8080 portu üzerinden çalıştırıyoruz.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar \
+  --port 8080 \
+  --nocluster \
+  --deploy wars/inventory-events-service-1.0-SNAPSHOT.war \
+  --logproperties /home/buraks/payara-micro/logging.properties
+
+# Inventory Notification Service uygulamasını 8081 portu üzerinden çalıştırıyoruz.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar \
+  --port 8081 \
+  --nocluster \
+  --deploy wars/inventory-notification-service-1.0.war \
+  --logproperties /home/buraks/payara-micro/logging.properties
+```
+
+Notification Service uygulamasında bir health endpoint yer alıyor. Servisin ayakta olup olmadığını kontrol etmek için kullanabiliriz. Bu amaçla aşağıdaki curl komutunu çalıştırabiliriz.
+
+```bash
+curl http://localhost:8081/inventory-notification-service-1.0/api/health
+```
+
+Her şey yolunda ise Event servis tarafından bir Post mesajı gönderip logları takip edebiliriz. Fırlatılan olayın yakalanması ve buna karşılık bir log mesajının OpenObserve üzerinde gözlemlenmesi gerekiyor. Bu sayede iki process arasında event bazlı bir mesajlaşma olduğunu görebiliriz. Örneğin aşağıdaki curl komutu ile Inventory Service uygulamasına bir POST talebi gönderelim.
+
+```bash
+curl -X POST http://localhost:8080/inventory-events-service-1.0-SNAPSHOT/api/inventory/stock-arrival \
+  -H "Content-Type: application/json" \
+  -d '{"id":"1001","name":"Can Kulod Van Dam","stockQuantity":24}'
+```
+
+Terminalde olayların yakalandığına dair loglar görmeliyiz ancak OpenObserve üzerinden aynı sonuçları elde edemeyebiliriz. Hatırlarsanız bir önceki örnekte loglar için Fluent Bit tarafına properties dosyası eklemiştik. Her iki uygulama için de ayrı properties dosyaları hazırlayarak farklı log dosyalarına yazmalarını sağlayabilir ve OpenObserve üzerinde daha kolay gözlemleyebiliriz. Ben yine kendi ubuntu sistemimde kullandığım `payara-micro` server üzerinden ele alacağım.
+
+Event oluşturan inventory servis logları için `logging-events.properties` isimli bir dosya oluşturdum. İçeriği şöyle;
+
+```text
+handlers=java.util.logging.FileHandler,java.util.logging.ConsoleHandler
+
+java.util.logging.FileHandler.pattern=/home/buraks/payara-micro/logs/inventory-events-service.log
+java.util.logging.FileHandler.formatter=fish.payara.enterprise.server.logging.JSONLogFormatter
+java.util.logging.FileHandler.limit=10000000
+java.util.logging.FileHandler.count=1
+java.util.logging.FileHandler.append=true
+java.util.logging.FileHandler.level=INFO
+
+java.util.logging.ConsoleHandler.formatter=com.sun.enterprise.server.logging.ODLLogFormatter
+java.util.logging.ConsoleHandler.level=FINE
+
+.level=INFO
+```
+
+Benzer şekilde event'i yakalayan notification servis logları için de `logging-notification.properties` isimli bir dosya oluşturdum. İçeriği şöyle;
+
+```text
+handlers=java.util.logging.FileHandler,java.util.logging.ConsoleHandler
+
+java.util.logging.FileHandler.pattern=/home/buraks/payara-micro/logs/inventory-notification-service.log
+java.util.logging.FileHandler.formatter=fish.payara.enterprise.server.logging.JSONLogFormatter
+java.util.logging.FileHandler.limit=10000000
+java.util.logging.FileHandler.count=1
+java.util.logging.FileHandler.append=true
+java.util.logging.FileHandler.level=INFO
+
+java.util.logging.ConsoleHandler.formatter=com.sun.enterprise.server.logging.ODLLogFormatter
+java.util.logging.ConsoleHandler.level=FINE
+
+.level=INFO
+```
+
+Bu ayarlamalara istinaden `fluent-bit.conf` dosyasında da tüm farklı input'ları ele almak için aşağıdaki değişikliği yaptım.
+
+```text
+[INPUT]
+    Name              tail
+    Path              /var/log/payara/*.log
+    Path_Key          source_file
+    Tag               payara.*
+    Parser            payara_json
+    Refresh_Interval  5
+```
+
+Sonrasında `fluent-bit` container'ını yeniden başlatmakta yarar var ki güncel konfigurasyon ayarlarını alsın. Ancak payara tarafındaki yürütmek komutlarımız da yeni log dosyalarına yazacak şekilde güncellenmeli. Bu sayede her iki uygulamanın logları da OpenObserve üzerinde gözlemlenebilir hale gelir.
+
+```bash
+# Önce fluent-bit container'ını yeniden başlatalım.
+sudo docker restart jakarta-fluent-bit
+
+# Inventory Service uygulamasını 8080 portu üzerinden çalıştırıyoruz.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar \
+  --port 8080 --nocluster \
+  --deploy wars/inventory-events-service-1.0-SNAPSHOT.war \
+  --logproperties /home/buraks/payara-micro/logging-events.properties
+
+# Inventory Notification Service uygulamasını 8081 portu üzerinden çalıştırıyoruz.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar \
+  --port 8081 --nocluster \
+  --deploy wars/inventory-notification-service-1.0.war \
+  --logproperties /home/buraks/payara-micro/logging-notification.properties
+```
+
+İşte küçük bir ispat.
+
+![OpenObserveRuntime_01](../../images/OpenObserveRuntime_01.png)
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
