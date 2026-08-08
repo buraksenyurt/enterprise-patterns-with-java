@@ -35,21 +35,25 @@ code --install-extension vscjava.vscode-java-pack
 
 Yardımcı diagramlar.
 
-### Creational Patterns - Builder Pattern
+### Creational Patterns - Builder
 
 ![Builder](./images/BuilderPatternUml.png)
 
-### Structural Patterns - Flyweight Pattern
+### Structural Patterns - Flyweight
 
 ![Flyweight Pattern](./images/FlyweightPatternUml.png)
 
-### Behavioral Patterns - Command Pattern
+### Behavioral Patterns - Command
 
 ![Command Pattern](./images/CommandPatternUml.png)
 
-### Behavioral Patterns - Strategy Pattern
+### Behavioral Patterns - Strategy
 
 ![Strategy Pattern](./images/StrategyPatternUml.png)
+
+### Behavioral Patterns - Observer
+
+![Observer Pattern](./images/ObserverPatternUml.png)
 
 ## Yardımcı Kaynaklar
 
