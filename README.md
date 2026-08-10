@@ -39,6 +39,10 @@ Yardımcı diagramlar.
 
 ![Builder](./images/BuilderPatternUml.png)
 
+### Creational Patterns - Prototype
+
+![Prototype Pattern](./images/PrototypePatternUml.png)
+
 ### Structural Patterns - Flyweight
 
 ![Flyweight Pattern](./images/FlyweightPatternUml.png)
