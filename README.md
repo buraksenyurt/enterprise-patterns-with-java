@@ -47,6 +47,10 @@ Yardımcı diagramlar.
 
 ![Flyweight Pattern](./images/FlyweightPatternUml.png)
 
+### Structural Patterns - Decorator
+
+![Decorator Pattern](./images/DecoratorPatternUml.png)
+
 ### Behavioral Patterns - Command
 
 ![Command Pattern](./images/CommandPatternUml.png)
