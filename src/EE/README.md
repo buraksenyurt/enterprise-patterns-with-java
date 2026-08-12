@@ -583,6 +583,30 @@ java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar \
 
 ![OpenObserveRuntime_01](../../images/OpenObserveRuntime_01.png)
 
+## Memo App
+
+Yine Jakarta ile yazılmış olan ancak bu kez HTML ve Vanilla JavaScript ile geliştirilmiş bir web uygulaması. Bu uygulama daha önceden Rust ile yazmayı denediğim bir web uygulamasının benzeri. Gündelik olarak farklı kaynaklardan (dergiler, bültenler, kitaplar vb) defterlere aldığım notları bir web uygulaması üzerinden kayıt altına almayı hedefliyor. Backend taraf `todo-app` ile neredeyse aynı. Yani JAX-RS, CDI ve JPA kullanıyor. Frontend taraf ise HTML ve Vanilla JavaScript ile geliştirildi ve stiller için basit bootstrap kullanılıyor. Veriyi yine PostgreSQL veritabanında saklıyoruz. Dolayısıyla `docker-compose` dosyasında konuşlandırdığımız PostgreSQL container'ını ayağa kaldırmak gerekiyor.
+
+Tabii memo tablosunun da oluşturulması da lazım. Bunun için `src/main/resources/META-INF/persistence.xml` dosyasında `jakarta.persistence.schema-generation.database.action` özelliğini **create** veya **drop-and-create** olarak ayarlayabiliriz. Bu sayede uygulama çalıştığında JPA, MemoConfiguration dosyasındaki DataSourceDefinition özelliğinde belirtilen konfigurasyon ayarlarına göre gerekli veritabanını ve tabloları otomatik olarak oluşturacaktır *(Bunu sadece geliştirme ortamında kullanılmalı. Üretim ortamında veritabanı ve tabloların manuel olarak oluşturulması veya migration araçları ile yönetilmesi daha güvenli olur)*
+
+Son olarak `memo-app` isimli projeyi çalıştırmak için yine `payara-micro` sunucusuna deploy etmek gerekiyor.
+
+```bash
+# memo-app.war dosyasını oluşturmak için önce projeyi derleyelim.
+mvn clean package
+
+# Sonrasında Payara Micro sunucusuna deploy edelim.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/memo-app-1.0.war
+```
+
+İşte çalışma zamanından birkaç görüntü;
+
+![Memo App Runtime 00](../../images/MemoAppRuntime_00.png)
+
+![Memo App Runtime 01](../../images/MemoAppRuntime_01.png)
+
+![Memo App Runtime 02](../../images/MemoAppRuntime_02.png)
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
