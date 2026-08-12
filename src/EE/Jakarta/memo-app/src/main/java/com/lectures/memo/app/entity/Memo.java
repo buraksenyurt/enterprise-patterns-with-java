@@ -6,9 +6,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
@@ -21,15 +23,20 @@ public class Memo {
 
     @NotEmpty(message = "Memo title cannot be empty")
     @Size(min = 20, message = "Title should not be less than 20 chars")
-    @Size(max = 100, message = "Task should not be more than 100 chars")
+    @Size(max = 100, message = "Title should not be more than 100 chars")
+    @Column(length = 100)
     private String title;
 
     @NotEmpty(message = "Memo summary cannot be empty")
-    @Size(min = 50, message = "Title should not be less than 50 chars")
-    @Size(max = 500, message = "Task should not be more than 1000 chars")
+    @Size(min = 50, message = "Summary should not be less than 50 chars")
+    @Size(max = 500, message = "Summary should not be more than 500 chars")
+    @Column(length = 500)
     private String summary;
 
-    // URL Validation ?
+    @Pattern(
+            regexp = "^$|^(https?://)?[\\w.-]+\\.[a-zA-Z]{2,}(/\\S*)?$",
+            message = "Link geçerli bir URL formatında olmalıdır"
+    )
     private String link;
 
     @Enumerated(EnumType.STRING)
