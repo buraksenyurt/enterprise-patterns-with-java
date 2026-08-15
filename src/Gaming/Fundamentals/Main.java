@@ -14,7 +14,7 @@ public class Main {
         int height = 960;
 
         GameWindow window = new GameWindow(width, height);
-        Hero hero = new Hero(width);
+        Hero hero = new Hero(width, height);
         window.setHero(hero);
 
         SwingUtilities.invokeLater(() -> {
@@ -32,9 +32,6 @@ public class Main {
         });
 
         while (true) {
-            // Update: Handle input and update hero position
-            // (Input handling code would go here)
-
             window.repaint();
 
             try {

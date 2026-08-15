@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Hero {
-    private int position;
-    private int width;
+    private static final int STEP = 20;
+
+    private final int maxX;
+    private final int maxY;
+    private int x;
+    private int y;
     private BufferedImage sprite;
 
-    public Hero(int width) {
-        this.width = width;
-        this.position = width / 2;
-
+    public Hero(int windowWidth, int windowHeight) {
         try {
             InputStream in = Hero.class.getResourceAsStream("Hero.png");
             if (in == null) {
@@ -24,22 +25,35 @@ public class Hero {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load Hero.png", e);
         }
+
+        this.maxX = windowWidth - sprite.getWidth();
+        this.maxY = windowHeight - sprite.getHeight();
+        this.x = maxX / 2;
+        this.y = maxY / 2;
     }
 
     public void moveLeft() {
-        if (position > 0) {
-            position--;
-        }
+        x = Math.max(0, x - STEP);
     }
 
     public void moveRight() {
-        if (position < width - 1) {
-            position++;
-        }
+        x = Math.min(maxX, x + STEP);
     }
 
-    public int getPosition() {
-        return position;
+    public void moveUp() {
+        y = Math.max(0, y - STEP);
+    }
+
+    public void moveDown() {
+        y = Math.min(maxY, y + STEP);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public BufferedImage getSprite() {

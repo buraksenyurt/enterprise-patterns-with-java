@@ -2,6 +2,8 @@ package Gaming.Fundamentals;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class GameWindow extends JPanel {
     private int gridWidth;
@@ -11,6 +13,7 @@ public class GameWindow extends JPanel {
     public GameWindow(int width, int height) {
         this.gridWidth = width;
         this.gridHeight = height;
+        setupKeyBindings();
     }
 
     public int getGridWidth() {
@@ -25,6 +28,29 @@ public class GameWindow extends JPanel {
         this.hero = hero;
     }
 
+    private void setupKeyBindings() {
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        bindMovement(inputMap, actionMap, KeyEvent.VK_LEFT, "moveLeft", () -> hero.moveLeft());
+        bindMovement(inputMap, actionMap, KeyEvent.VK_RIGHT, "moveRight", () -> hero.moveRight());
+        bindMovement(inputMap, actionMap, KeyEvent.VK_UP, "moveUp", () -> hero.moveUp());
+        bindMovement(inputMap, actionMap, KeyEvent.VK_DOWN, "moveDown", () -> hero.moveDown());
+    }
+
+    private void bindMovement(InputMap inputMap, ActionMap actionMap, int keyCode, String name, Runnable action) {
+        inputMap.put(KeyStroke.getKeyStroke(keyCode, 0), name);
+        actionMap.put(name, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (hero != null) {
+                    action.run();
+                    repaint();
+                }
+            }
+        });
+    }
+
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         super.paintComponent(g);
@@ -33,10 +59,7 @@ public class GameWindow extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         if (hero != null && hero.getSprite() != null) {
-            Image sprite = hero.getSprite();
-            int x = (getWidth() - sprite.getWidth(this)) / 2;
-            int y = (getHeight() - sprite.getHeight(this)) / 2;
-            g2.drawImage(sprite, x, y, this);
+            g2.drawImage(hero.getSprite(), hero.getX(), hero.getY(), this);
         }
     }
 }
