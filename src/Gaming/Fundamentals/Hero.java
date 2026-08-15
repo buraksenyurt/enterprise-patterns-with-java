@@ -1,17 +1,18 @@
 package Gaming.Fundamentals;
 
 import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Hero {
-    private static final int STEP = 20;
+public class Hero implements Drawable {
+    private static final double SPEED = 200;
 
-    private final int maxX;
-    private final int maxY;
-    private int x;
-    private int y;
+    private final double maxX;
+    private final double maxY;
+    private double x;
+    private double y;
     private BufferedImage sprite;
 
     public Hero(int windowWidth, int windowHeight) {
@@ -28,35 +29,28 @@ public class Hero {
 
         this.maxX = windowWidth - sprite.getWidth();
         this.maxY = windowHeight - sprite.getHeight();
-        this.x = maxX / 2;
+        // this.x = maxX / 2;
         this.y = maxY / 2;
     }
 
-    public void moveLeft() {
-        x = Math.max(0, x - STEP);
+    public void moveLeft(double deltaSeconds) {
+        x = Math.max(0, x - SPEED * deltaSeconds);
     }
 
-    public void moveRight() {
-        x = Math.min(maxX, x + STEP);
+    public void moveRight(double deltaSeconds) {
+        x = Math.min(maxX, x + SPEED * deltaSeconds);
     }
 
-    public void moveUp() {
-        y = Math.max(0, y - STEP);
+    public void moveUp(double deltaSeconds) {
+        y = Math.max(0, y - SPEED * deltaSeconds);
     }
 
-    public void moveDown() {
-        y = Math.min(maxY, y + STEP);
+    public void moveDown(double deltaSeconds) {
+        y = Math.min(maxY, y + SPEED * deltaSeconds);
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public BufferedImage getSprite() {
-        return sprite;
+    @Override
+    public void draw(Graphics2D g2) {
+        g2.drawImage(sprite, (int) Math.round(x), (int) Math.round(y), null);
     }
 }
