@@ -10,7 +10,9 @@ public interface GameRepository {
 
     Optional<Game> update(Long id, Game game);
 
-    Optional<Game> findById(long id);
+    Optional<Game> findById(Long id);
+    
+    boolean delete(Long id);
 
     List<Game> findAll();
 
