@@ -1,4 +1,4 @@
-package com.lectures.com.lectures.gamecatalog.resources;
+package com.lectures.gamecatalog.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

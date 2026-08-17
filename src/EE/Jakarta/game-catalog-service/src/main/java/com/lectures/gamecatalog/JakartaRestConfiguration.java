@@ -1,4 +1,4 @@
-package com.lectures.com.lectures.gamecatalog;
+package com.lectures.gamecatalog;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
