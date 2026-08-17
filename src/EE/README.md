@@ -607,6 +607,10 @@ java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy war
 
 ![Memo App Runtime 02](../../images/MemoAppRuntime_02.png)
 
+## GameCatalog Service Uygulaması
+
+Bu örnekte monolitik mimarilerinin en bilinen ve en sık kullanılan örneklerinden birisi olan katmanlı mimari *(Layered Architecture)* ele alınıyor. Başlangıçta basit bir katman yapısı kullanıyoruz. Bir başka sürümünde CQRS *(Command Query Responsibility Segregation)* yaklaşımını da ele alacağız.
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
