@@ -609,7 +609,21 @@ java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy war
 
 ## GameCatalog Service Uygulaması
 
-Bu örnekte monolitik mimarilerinin en bilinen ve en sık kullanılan örneklerinden birisi olan katmanlı mimari *(Layered Architecture)* ele alınıyor. Başlangıçta basit bir katman yapısı kullanıyoruz. Bir başka sürümünde CQRS *(Command Query Responsibility Segregation)* yaklaşımını da ele alacağız.
+Bu örnekte monolitik mimarilerinin en bilinen ve en sık kullanılan örneklerinden birisi olan katmanlı mimari *(Layered Architecture)* ele alınıyor. Başlangıçta basit bir katman yapısı kullanıyoruz. Bir başka sürümünde CQRS *(Command Query Responsibility Segregation)* yaklaşımını da ele alabiliriz. Uygulamayı test etmek için her zaman olduğu gibi öncelikle build alınan WAR dosyasının Payara Micro sunucusuna deploy edilmesi gerekiyor. Sonrasında Insomnia veya curl komutları ile test edebiliriz.
+
+```bash
+# game-catalog-service.war dosyasını oluşturmak için önce projeyi derleyelim.
+mvn clean package
+
+# Sonrasında Payara Micro sunucusuna deploy edelim.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/game-catalog-service.war
+```
+
+Örnek bir POST çıktısı;
+
+![alt text](../../images/Runtime_05.png)
+
+Diğer denemeler için [Insomnia_GameCatalogApi.yaml](../../Insomnia_GameCatalogApi.yaml) dosyasını kullanabiliriz. Bu dosyayı Insomnia'ya import ederek testleri kolayca yapabiliriz.
 
 ## FAQ
 
