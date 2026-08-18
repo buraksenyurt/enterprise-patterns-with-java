@@ -36,7 +36,7 @@ public class GameResource {
 
     @PUT
     @Path("{id}")
-    public Game update(@PathParam("id)") Long id, @Valid Game game) {
+    public Game update(@PathParam("id") Long id, @Valid Game game) {
         return gameService.update(id, game);
     }
 
@@ -54,12 +54,13 @@ public class GameResource {
     }
 
     @GET
-    public List<Game> getByGenre(@QueryParam("genre") Genre genre) {
-        return genre != null ? gameService.getByGenre(genre) : gameService.getAll();
-    }
-
-    @GET
-    public List<Game> getByPlatform(@QueryParam("platform") Platform platform) {
-        return platform != null ? gameService.getByPlatform(platform) : gameService.getAll();
+    public List<Game> getAll(@QueryParam("genre") Genre genre, @QueryParam("platform") Platform platform) {
+        if (genre != null) {
+            return gameService.getByGenre(genre);
+        }
+        if (platform != null) {
+            return gameService.getByPlatform(platform);
+        }
+        return gameService.getAll();
     }
 }

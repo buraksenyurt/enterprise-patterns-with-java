@@ -15,7 +15,8 @@ gösterilirler.
 bir çıktıya düşürmek daha mantıklı olacaktır. 
 
 Bu amaçla bir mapper kullanıyor ve GameNotFoundException'ı dönüştürüyoruz.
-Aynı işlem validasyon kural ihlallerinde oluşan ConstraintViolationException
+
+Benzer işlem validasyon kural ihlallerinde oluşan ConstraintViolationException
 türü için ConstraintViolationExceptionMapper sınıfında da yapılıyor.
  */
 @Provider
