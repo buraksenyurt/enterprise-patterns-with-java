@@ -16,7 +16,8 @@ public class GameService {
     private void validateBusinessRules(Game game) {
         int currentYear = Year.now().getValue();
         if (game.getReleaseYear() > currentYear) {
-            throw new IllegalArgumentException("Gelecek bir yıl için giriş yapamayız");
+            // throw new IllegalArgumentException("Gelecek bir yıl için giriş yapamayız");
+            throw new GameBusinessValidationException("Gelecek bir yıl için giriş yapamayız!");
         }
     }
 
