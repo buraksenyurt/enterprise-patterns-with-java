@@ -621,9 +621,48 @@ java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy war
 
 Örnek bir POST çıktısı;
 
-![alt text](../../images/Runtime_05.png)
+![Runtime 05](../../images/Runtime_05.png)
 
 Diğer denemeler için [Insomnia_GameCatalogApi.yaml](../../Insomnia_GameCatalogApi.yaml) dosyasını kullanabiliriz. Bu dosyayı Insomnia'ya import ederek testleri kolayca yapabiliriz.
+
+### Repository Kullanımları
+
+Bu örnekte ilk olarak In-Memory çalışan bir repository baz alındı; `InMemoryGameRepository.java` Sonrasında docker container olarak ayağa kaldırdığımız My SQL veritabanını ele alan bir repository'ye geçtik; `JpaGameRepository.java`. Aslında bu sınıf genel olarak bir Java Persistence API *(JPA)* implementasyonu. Bu sınıfın `@ApplicationScoped` anotasyonu ile işaretlenmiş olması, CDI tarafından uygulama seviyesinde bir kez oluşturulmasını sağlar. Bu sayede uygulama boyunca aynı instance kullanılabilir. Ayrıca JPA'nın EntityManager'ı da bu sınıf içerisinde yönetiliyor. EntityManager, JPA'nın veritabanı işlemlerini gerçekleştiren ana bileşenidir ve genellikle uygulama seviyesinde bir kez oluşturulur ve tüm repository'ler tarafından paylaşılır. Uygulamayı payara-micro sunucusunda ele aldığımız için o ortama da bazı konfigurasyon ayarlarını vermemiz gerekir. Bu amaçla `persistence.xml` ve `glassfish-resources.xml` dosyaları kullanılır. Bu dosyalar, JPA ve veritabanı bağlantı ayarlarını içerir. Örneğin `persistence.xml` dosyasında veritabanı bağlantı ayarları, JPA provider'ı ve entity sınıfları belirtilir. `glassfish-resources.xml` dosyasında ise veritabanı kaynakları ve JNDI isimleri tanımlanır. Bu sayede uygulama sunucusu, JPA ve veritabanı bağlantılarını yönetebilir.
+
+### Migration ve Flyway Kullanımı
+
+Öğrenme safhasında persistence kısmındaki aşağıdaki nitelik önemlidir.
+
+```xml
+<property name="jakarta.persistence.schema-generation.database.action"  value="drop-and-create"/>
+```
+
+`drop-and-create` değeri, uygulama başlatıldığında veritabanındaki mevcut tabloların silinip yeniden oluşturulmasını sağlar. Bu, geliştirme ve test aşamalarında kullanışlıdır çünkü veritabanı şemasını hızlı bir şekilde sıfırlayabiliriz. Ancak bir handikapı vardır veriler sıfırlanır. Bu yüzden klasik olarak bir migration düzeneği kurgulamak gerekiyor. Örneğin RedGate'in [Flyway](https://flywaydb.org/) veya [Liquibase](https://www.liquibase.org/) gibi araçlar kullanarak veritabanı şemasını yönetebiliriz.
+
+Bir .Net geliştiricisi için Entity Framework tarafındaki gibi Code First yaklaşımları Java eko sisteminde göremeyebiliriz. Bu son derece doğaldır zira felsefi olarak migration dosyalarının elle yazılmış, gözden geçirilmiş SQL betikleri olması tercih edilir. Zira otomatik üretilen migration'lar semantik olarak belirsiz değişikliklerde(rename işlemi gibi) veri kaybına yol açabilir. Entity Framework tarafı da zaten bu riski taşır ama Java dünyasında bu riske karşı geçmişten beri gelen ve temkinli davranmayı merkeze alan bir gelenek olduğunu söylemek yanlış olmaz.
+
+Flyway implementasyonunu kısaca özetleyelim;
+
+- Öncelikle MySQL docker container'ı silip tekrar ayağa kaldırdık. Taze bir başlangıç için.
+- Flyway ile ilgili bağımlılıkları `pom.xml` dosyasına ekledik.
+- `src/main/resources/db/migration` dizini altında migration dosyalarını oluşturduk. Bu dizin, Flyway'in varsayılan olarak migration dosyalarını aradığı yer. Örnek olarak **games** tablosunun oluşturulması ve örnek bir alanın eklenmesi işlemlerini sırasıyla `V1__create_games_table.sql` ve `V2__add_summary_column.sql` dosyalarında gerçekleştirdik. Dosya isimlendirmesi Flyway tarafından belirlenen bir konvansiyona uygun olmalı. Örneğin `V1__create_games_table.sql` dosyası, ilk migration'ı temsil eder ve `games` tablosunun oluşturulmasını sağlar. `V2__add_summary_column.sql` dosyası ise ikinci migration'ı temsil eder ve `games` tablosuna `summary` isimli yeni bir sütun ekler.
+- Pek tabii **summary* alanının Game entity sınıfına da eklenmesi gerekir.
+- Migration işlemlerini uygulama başlarken otomatik olarak gerçekleştirmek ya da varsa yeni versiyonları işlettirmek adına işleri kolaylaştıracak bir bileşen yazdık; `FlywayMigrationRunner.java`.
+
+Bu işlemler sonrasında uygulama tekrardan çalıştırılabilir. İlk çalıştırma esnasında `payara-micro` tarafındaki sunucu loglarında Flyway tarafından migration işlemlerinin başarıyla tamamlandığını görmemiz gerekiz.
+
+![Flyway Migration Log](../../images/FlywayLog_00.png)
+
+Hatta docker container içerisine mysql terminali açıp migration tarihçesini ve tablomuzun güncel halini de görebiliriz.
+
+```bash
+docker exec -it jakarta-mysql mysql -u gamecatalog_user -p gamecatalog \
+  -e "SELECT version, description, success FROM flyway_schema_history; DESCRIBE games;"
+```
+
+![Flyway Migration](../../images/FlywayMigration_00.png)
+
+Artık yeni bir tablo ekleme, kolon değişikliği yapma gibi işlemlere ihtiyaç duyduğumuzda yeni versiyon dosyaları oluşturmamız ve Entity sınıflarında gerekli değişiklikleri yapmamız yeterli olacaktır. Flyway, uygulama başlatıldığında mevcut versiyonları kontrol eder ve eksik olan migration'ları uygular. Bu sayede veritabanı şeması her zaman güncel kalır. Yapılmaması gereken şeylerin başında var olan versiyonlar üzerinde değişiklik yapmak gelir. Bu, migration tarihçesini bozabilir ve veri kaybına yol açabilir. Bu yüzden her zaman yeni bir versiyon dosyası oluşturmak en güvenli yaklaşımdır.
 
 ## FAQ
 
