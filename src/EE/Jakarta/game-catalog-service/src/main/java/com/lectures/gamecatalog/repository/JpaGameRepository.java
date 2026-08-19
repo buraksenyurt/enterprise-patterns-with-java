@@ -35,6 +35,7 @@ public class JpaGameRepository implements GameRepository {
     }
 
     @Override
+    @Transactional
     public boolean delete(Long id) {
         Game existing = entityManager.find(Game.class, id);
         if (existing == null) {
@@ -52,7 +53,7 @@ public class JpaGameRepository implements GameRepository {
     @Override
     public List<Game> findAll() {
         return entityManager
-                .createQuery("SELECT g FROM game g", Game.class)
+                .createQuery("SELECT g FROM Game g", Game.class)
                 .getResultList();
     }
 

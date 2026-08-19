@@ -8,7 +8,12 @@
         <!-- Local ortamda MySQL sürücüsünü Docker Container ile kullanıyoruz.
             Burada SSL ile ilgili bir hata alabiliriz. Local geliştirme ortamında
             bu hatanın etrafından dolanmak için url bilgisinde sslMode bilinçli
-            olarak disable edildi. Üretim ortamlarında sakın yapmayın ! :D
+            olarak disable edildi. 
+            
+            Ayrıca caching_sha2_password hatası nedeniyle de, 
+            allowPublicKeyRetrieval özelliği true olarak atandı.
+            
+            By ikisini üretim ortamlarında sakın yapmayın ! :D
         -->
                      
         <property name="ServerName" value="localhost"/>
@@ -20,6 +25,7 @@
         <property name="characterEncoding" value="UTF-8"/>
         <property name="serverTimezone" value="UTC"/>
         <property name="sslMode" value="DISABLED"/>
+        <property name="allowPublicKeyRetrieval" value="true"/>
     </jdbc-connection-pool>
 
     <jdbc-resource pool-name="GameCatalogPool" jndi-name="java:app/jdbc/gamecatalog"/>

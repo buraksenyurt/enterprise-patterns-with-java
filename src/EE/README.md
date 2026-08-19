@@ -616,7 +616,7 @@ Bu örnekte monolitik mimarilerinin en bilinen ve en sık kullanılan örnekleri
 mvn clean package
 
 # Sonrasında Payara Micro sunucusuna deploy edelim.
-java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/game-catalog-service.war
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/game-catalog-service.war --logproperties /home/buraks/payara-micro/logging.properties
 ```
 
 Örnek bir POST çıktısı;
