@@ -1,5 +1,6 @@
 package com.lectures.gamecatalog.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 /*
@@ -11,34 +12,56 @@ resource katmanın otomatik olarak çalışırlar.
     Ancak örneğin Publisher değerinin gelecek bir yılda olmaması gibi kurallar
 daha çok iş kuralları gibi düşünülebilir. Bunları service katmanında yazarız
 zira domain bilgisi gerektirir.
+
+    Entity sınıfımız Persistance sürücüsünü mySql'e çevirdikten sonra
+bazı anotasyonlarla zenginleştirdik. Entity, Table, Column, Enumerated gibi.
+
+    Enum türlerinde kasıtlı olarak ORDINAL yerine EnumType.STRING kullandık.
+0,1,2 gibi sıralı numaraları kullandığımızda yeni bir enum değer eklenmesi veritabanı
+tarafında eski kayıtların sessizce yanlış türe işaret etmesine neden olabilir.
+STRING seçimi biraz yer kaplasa da bu sorunun yaşanmamasını da garanti eder.
  */
+@Entity
+@Table(name = "games")
 public class Game {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Oyun başlığı boş olamaz")
+    @Column(nullable = false)
     private String title;
 
     @NotNull(message = "Oyun türü seçilmelidir")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
     private Genre genre;
 
     @NotNull(message = "Oyun platformu seçilmelidir")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
     private Platform platform;
 
     @Min(value = 1970, message = "Piyasaya sürüldüğü yıl bilgisi geçerli olmalı.")
+    @Column(nullable = false, name = "release_year")
     private int releaseYear;
 
     @NotBlank(message = "Yayıncı bilgisi boş olamaz")
+    @Column(nullable = false)
     private String publisher;
 
     @Min(value = 1, message = "Topluluk puanı 1 den büyük, 10'dan küçük olmalıdır")
     @Max(value = 10, message = "Topluluk puanı 1 den büyük, 10'dan küçük olmalıdır")
+    @Column(nullable = false)
     private short score;
 
     @Positive(message = "Fiyat bilgisi pozitif olmalıdır")
+    @Column(nullable = false)
     private double price;
 
     @PositiveOrZero(message = "Stok değeri negatif olamaz")
+    @Column(name = "stock_quantity", nullable = false)
     private int stockQuantity;
 
     public Game() {

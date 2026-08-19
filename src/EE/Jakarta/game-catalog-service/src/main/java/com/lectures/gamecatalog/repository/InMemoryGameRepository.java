@@ -26,7 +26,8 @@ kullanıyoruz.
 Bu nedenle atomik bir sayısal değer kullanıyoruz.
 
  */
-@ApplicationScoped
+// @ApplicationScoped 
+//MySQL sürücüsünü kullanan repository'ye geçtiğimiz için kaldırdık.
 public class InMemoryGameRepository implements GameRepository {
 
     private final Map<Long, Game> store = new ConcurrentHashMap<>();
