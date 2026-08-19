@@ -50,6 +50,19 @@ public class JpaGameRepository implements GameRepository {
         return Optional.ofNullable(entityManager.find(Game.class, id));
     }
 
+    /*
+        Sorgular ile ilgili bir not düşelim. Migration ile ilgili SQL
+    dosyalarında MySQL tablo adı olarak `games` kullanılıyor. Game entity
+    sınıfında da Table anotasyonunda `games` adı kullanılmakta. Bu tamamen
+    fiziksel tablonun adı.
+    
+    Ancak aşağıdaki sorgularda dikkat edileceği üzere Game şeklinde
+    doğrudan Entity sınıf adı kullanılmakta. Burada JPQL(Jakarta Persistence
+    Query Language) notasyonu söz konusudur. Yani Entity seviyesinde yazılan,
+    provider-agnostik bir sorgulama dilinden bahsediyoruz. EclipseLink bu
+    sorguları SQL'e çevirirken yine tablo adı olarak games'i kullanacaktır.
+    
+    */
     @Override
     public List<Game> findAll() {
         return entityManager

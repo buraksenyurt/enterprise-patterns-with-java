@@ -12,7 +12,7 @@ collection:
     meta:
       id: req_f4b3b2cb50ed44559f262ba26eac246f
       created: 1787038677825
-      modified: 1787055811831
+      modified: 1787150251838
       isPrivate: false
       description: ""
       sortKey: -1787038677825
@@ -30,7 +30,7 @@ collection:
     meta:
       id: req_1cb42e14354843e0b11c2695e35016c1
       created: 1787055835400
-      modified: 1787055947192
+      modified: 1787149887884
       isPrivate: false
       description: ""
       sortKey: -1786522665587
@@ -48,7 +48,7 @@ collection:
     meta:
       id: req_5e49f8367b794f539eb4e6154015932c
       created: 1787055949162
-      modified: 1787056144771
+      modified: 1787149945563
       isPrivate: false
       description: ""
       sortKey: -1787055949162
@@ -57,13 +57,13 @@ collection:
       mimeType: application/json
       text: |-
         {
-        	"title": "Super Mario Bross",
+        	"title": "Super Mario Bross II",
         	"genre": "ADVENTURE",
-        	"platform": "AMIGA",
-        	"releaseYear": 1985,
+        	"platform": "PC",
+        	"releaseYear": 1996,
         	"publisher": "Nintendo",
-        	"score": 7,
-        	"price": 9.99
+        	"score": 5,
+        	"price": 5.45
         }
     headers:
       - name: Content-Type
@@ -81,7 +81,7 @@ collection:
     meta:
       id: req_9fdc793299d64c8c8fa04ab58981ed76
       created: 1787056186461
-      modified: 1787056429667
+      modified: 1787162477479
       isPrivate: false
       description: ""
       sortKey: -1787047313493.5
@@ -91,6 +91,7 @@ collection:
       text: |-
         {
         	"title": "Super Mario Bross",
+        	"summary": "Bakalım Mario mantarlardan kurtulabilecek mi?",
         	"genre": "ADVENTURE",
         	"platform": "AMIGA",
         	"releaseYear": 1985,
@@ -128,12 +129,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/game-catalog-service/api/games?platform=AMIGA
+  - url: http://localhost:8080/game-catalog-service/api/games?platform=PC
     name: Get by Platform
     meta:
       id: req_439979ce96ab424199b2fbbef08718af
       created: 1787056880857
-      modified: 1787056912542
+      modified: 1787150121892
       isPrivate: false
       description: ""
       sortKey: -1786651668646.5

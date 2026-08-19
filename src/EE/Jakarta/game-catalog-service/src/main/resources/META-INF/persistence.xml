@@ -21,9 +21,13 @@
 
             Gerçek bir sistemde bunun yerini Flyway veya 
             Liquibase gibi bir migration aracı alır.
+            
+            <property name="jakarta.persistence.schema-generation.database.action" 
+                value="drop-and-creat"/>                        
             -->
-            <property name="jakarta.persistence.schema-generation.database.action"
-                      value="drop-and-create"/>
+            
+            <!-- NOT: Flyway implementasyonu sonucu none'a çekildi. -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
         </properties>
     </persistence-unit>
 </persistence>

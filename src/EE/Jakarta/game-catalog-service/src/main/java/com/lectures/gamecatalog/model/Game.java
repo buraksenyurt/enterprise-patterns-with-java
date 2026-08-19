@@ -64,6 +64,9 @@ public class Game {
     @Column(name = "stock_quantity", nullable = false)
     private int stockQuantity;
 
+    @Column(length = 1000)
+    private String summary;
+
     public Game() {
     }
 
@@ -137,5 +140,13 @@ public class Game {
 
     public void setStockQuantity(int stockQuantity) {
         this.stockQuantity = stockQuantity;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }
