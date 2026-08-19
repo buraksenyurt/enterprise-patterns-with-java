@@ -19,6 +19,19 @@
             <version>${jakartaee}</version>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- My Sql driver 
+            Scope değeri özellikle boş bırakıldı.
+            Derleme sonrası bu bağımlılık otomatik olarak
+            WEB-INF/lib'e paketlenir. Böylece WAR dosyası ile birlikte
+            taşınır. Payara Micro uyguladığı JPA standardı sebebiyle
+            kurulumuna dokunmamıza ve bir ayarlama yapmamıza gerek kalmaz.
+        -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>26.7.0</version>
+        </dependency>
     </dependencies>
     
     <build>

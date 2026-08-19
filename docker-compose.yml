@@ -72,7 +72,20 @@ services:
       - ./parsers.conf:/fluent-bit/etc/parsers.conf:ro
     networks:
       - spring-network
-
+  
+  mysql:
+    image: mysql:9.7
+    container_name: jakarta-mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=RootPass123!
+      - MYSQL_DATABASE=gamecatalog
+      - MYSQL_USER=gamecatalog_user
+      - MYSQL_PASSWORD=GameCatalog123!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
 
 volumes:
   postgres_data:
@@ -81,6 +94,7 @@ volumes:
   sonarqube_extensions:
   openobserve_data:
   fluent_bit_data:
+  mysql_data:
 
 networks:
   spring-network:
