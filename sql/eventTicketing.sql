@@ -7,14 +7,14 @@ CREATE TABLE IF NOT EXISTS events (
     name VARCHAR(255) NOT NULL,
     total_seats INTEGER NOT NULL,
     seats_sold INTEGER NOT NULL DEFAULT 0,
-    ticket_price DECIMAL(10, 2) NOT NULL
+    ticket_price NUMERIC(10, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS customers (
     id BIGSERIAL PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    wallet_balance DECIMAL(10, 2) NOT NULL DEFAULT 0.00
+    wallet_balance NUMERIC(10, 2) NOT NULL DEFAULT 0.00
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     event_id BIGINT NOT NULL REFERENCES events(id),
     customer_id BIGINT NOT NULL REFERENCES customers(id),
     seat_count INTEGER NOT NULL,
-    total_price DECIMAL(10, 2) NOT NULL,
+    total_price NUMERIC(10, 2) NOT NULL,
     booking_time TIMESTAMP NOT NULL DEFAULT now()
 );
 
