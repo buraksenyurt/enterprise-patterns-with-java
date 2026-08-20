@@ -2,7 +2,7 @@ services:
 
   postgres:
     image: postgres:latest
-    container_name: spring-postgres
+    container_name: java-town-postgres
     environment:
       POSTGRES_USER: johndoe
       POSTGRES_PASSWORD: somew0rds
@@ -12,11 +12,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
     networks:
-      - spring-network
+      - java-town-network
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: spring-pgadmin
+    container_name: java-town-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: scoth@tiger.com
       PGADMIN_DEFAULT_PASSWORD: 123456
@@ -25,11 +25,11 @@ services:
     depends_on:
       - postgres
     networks:
-      - spring-network
+      - java-town-network
 
   sonarqube:
     image: sonarqube:community
-    container_name: spring-sonarqube
+    container_name: java-town-sonarqube
     restart: unless-stopped
     stop_grace_period: 1h
     ports:
@@ -40,19 +40,21 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_extensions:/opt/sonarqube/extensions
-  
+    networks:
+      - java-town-network
+
   rabbitmq:
     image: rabbitmq:4-management
-    container_name: jakarta-rabbitmq
+    container_name: java-town-rabbitmq
     ports:
-      - "5672:5672"    # AMQP portu
-      - "15672:15672"  # Yönetim paneli (guest/guest)
+      - "5672:5672" # AMQP portu
+      - "15672:15672" # Yönetim paneli (guest/guest)
     networks:
-      - spring-network
-  
+      - java-town-network
+
   openobserve:
     image: public.ecr.aws/zinclabs/openobserve:latest
-    container_name: jakarta-openobserve
+    container_name: java-town-openobserve
     environment:
       - ZO_ROOT_USER_EMAIL=admin@example.com
       - ZO_ROOT_USER_PASSWORD=ComplexPassword123!
@@ -61,21 +63,21 @@ services:
     volumes:
       - openobserve_data:/data
     networks:
-      - spring-network
+      - java-town-network
 
   fluent-bit:
     image: fluent/fluent-bit:latest
-    container_name: jakarta-fluent-bit
+    container_name: java-town-fluent-bit
     volumes:
       - /home/buraks/payara-micro/logs:/var/log/payara:ro
       - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
       - ./parsers.conf:/fluent-bit/etc/parsers.conf:ro
     networks:
-      - spring-network
-  
+      - java-town-network
+
   mysql:
     image: mysql:9.7
-    container_name: jakarta-mysql
+    container_name: java-town-mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       - MYSQL_ROOT_PASSWORD=RootPass123!
@@ -86,6 +88,8 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - java-town-network
 
 volumes:
   postgres_data:
@@ -97,5 +101,5 @@ volumes:
   mysql_data:
 
 networks:
-  spring-network:
+  java-town-network:
     driver: bridge

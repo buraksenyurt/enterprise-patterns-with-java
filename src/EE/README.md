@@ -664,6 +664,10 @@ docker exec -it jakarta-mysql mysql -u gamecatalog_user -p gamecatalog \
 
 Artık yeni bir tablo ekleme, kolon değişikliği yapma gibi işlemlere ihtiyaç duyduğumuzda yeni versiyon dosyaları oluşturmamız ve Entity sınıflarında gerekli değişiklikleri yapmamız yeterli olacaktır. Flyway, uygulama başlatıldığında mevcut versiyonları kontrol eder ve eksik olan migration'ları uygular. Bu sayede veritabanı şeması her zaman güncel kalır. Yapılmaması gereken şeylerin başında var olan versiyonlar üzerinde değişiklik yapmak gelir. Bu, migration tarihçesini bozabilir ve veri kaybına yol açabilir. Bu yüzden her zaman yeni bir versiyon dosyası oluşturmak en güvenli yaklaşımdır.
 
+## Transaction Kullanım Örneği (event-ticketing-service Uygulaması)
+
+Bu örnekte amaç bir bilet rezervasyon işlemini transaction bütünlüğü içerisinde ele almaktır. Örnekte PostgreSQL veritabanı kullanılmakta ve her zaman olduğu gibi docker container olarak ayağa kaldırılmakta. Örnek veritabanımızda etkinlik *(events)*, müşteri *(customers)* ve rezervasyon *(bookings)* tabloları yer almakta. Ayrıca başarılı/başarısız transaction'lar dahil tüm işlemleri kayıt altına aldığımız bir tablo daha bulunuyor *(booking_attempts)*. Veritabanı tablolarının oluşturmak için kullanacağımız script dosyası da [burada](../../sql/eventTicketing.sql) yer almakta.
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
