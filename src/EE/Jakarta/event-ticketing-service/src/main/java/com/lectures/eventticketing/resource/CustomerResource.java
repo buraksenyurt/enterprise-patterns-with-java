@@ -1,5 +1,6 @@
 package com.lectures.eventticketing.resource;
 
+import com.lectures.eventticketing.model.Customer;
 import com.lectures.eventticketing.repository.CustomerRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -10,7 +11,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 // Testler sırasında kullanacağımız yardımcı endpoint'lerden bir diğeri
-@Path("events")
+@Path("customers")
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {

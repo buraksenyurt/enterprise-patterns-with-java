@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
 // Testler sırasında kullanacağımız yardımcı endpoint'lerden birisi
-@Path("events")
+@Path("booking-attempts")
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 public class BookingAttemptResource {
