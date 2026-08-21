@@ -668,6 +668,80 @@ Artık yeni bir tablo ekleme, kolon değişikliği yapma gibi işlemlere ihtiya�
 
 Bu örnekte amaç bir bilet rezervasyon işlemini transaction bütünlüğü içerisinde ele almaktır. Örnekte PostgreSQL veritabanı kullanılmakta ve her zaman olduğu gibi docker container olarak ayağa kaldırılmakta. Örnek veritabanımızda etkinlik *(events)*, müşteri *(customers)* ve rezervasyon *(bookings)* tabloları yer almakta. Ayrıca başarılı/başarısız transaction'lar dahil tüm işlemleri kayıt altına aldığımız bir tablo daha bulunuyor *(booking_attempts)*. Veritabanı tablolarının oluşturmak için kullanacağımız script dosyası da [burada](../../sql/eventTicketing.sql) yer almakta.
 
+Uygulamayı ayağa kaldırmak için diğer örneklerde de olduğu gibi önce `event-ticketing-service.war` dosyasını Payara Micro sunucusuna deploy etmemiz gerekiyor. Sonrasında Insomnia veya curl komutları ile test edebiliriz.
+
+```bash
+# event-ticketing-service.war dosyasını oluşturmak için önce projeyi derleyelim
+mvn clean package
+
+# Sonrasında Payara Micro sunucusuna deploy edelim.
+java -Djava.net.preferIPv4Stack=true -jar payara-micro-7.2026.5.jar --deploy wars/event-ticketing-service.war --logproperties /home/buraks/payara-micro/logging.properties
+```
+
+Bu örnekte transaction yönetimini test etmek için farklı senaryolar ele alabiliriz. Bakiyenin yetersiz olması hali bunun en popülerlerinden birisi olacaktır. Aşağıdaki **curl** komutları ile ve **Insomnia** üzerinden test edebiliriz.
+
+```bash
+# Veritabanı scriptini çalıştırdıysak önceden eklenmiş müşteri ve etkinlik verileri olmalı
+# Bunları aşağıdaki curl komutları ile test edebiliriz.
+
+curl http://localhost:8080/event-ticketing-service/api/events/1 -w "\\n"
+curl http://localhost:8080/event-ticketing-service/api/customers/1 -w "\\n"
+```
+
+![Transaction Runtime 00](../../images/TransactionRuntime_00.png)
+
+```bash
+# Başarılı olacak bir rezervasyon deneyelim(Müşteri bakiyesi yeterli)
+# Deneme öncesinde ve sonrasında koltuk sayısını da kontrol etmek lazım.
+# İşlem başarılı olursa rezerver edilen koltuk sayısı artmalı ve müşteri bakiyesi düşmelidir.
+curl http://localhost:8080/event-ticketing-service/api/events/2 -w "\\n"
+curl http://localhost:8080/event-ticketing-service/api/customers/3 -w "\\n"
+curl -X POST http://localhost:8080/event-ticketing-service/api/bookings \
+  -H "Content-Type: application/json" \
+  -d '{"eventId":2,"customerId":3,"seatCount":1}'
+curl http://localhost:8080/event-ticketing-service/api/events/2 -w "\\n"
+curl http://localhost:8080/event-ticketing-service/api/customers/3 -w "\\n"
+```
+
+![Transaction Runtime 01](../../images/TransactionRuntime_01.png)
+
+```bash
+# Yetersiz bakiye ile başarısız olacak bir rezervasyon deneyelim(Bilet sayısını abartarak)
+# Bu işlem öncesinde ve sonrasında koltuk sayısını bir kontrol etmek gerekir.
+# Transaction'ın geri alındığının kanıtı olarak koltuk sayısının değişmediğini görmeliyiz.
+# Pek tabii müşteri bakiyesi de değişmemelidir.
+curl http://localhost:8080/event-ticketing-service/api/events/2 -w "\\n"
+curl http://localhost:8080/event-ticketing-service/api/customers/1 -w "\\n"
+curl -X POST http://localhost:8080/event-ticketing-service/api/bookings \
+  -H "Content-Type: application/json" \
+  -d '{"eventId":2,"customerId":1,"seatCount":10}'
+curl http://localhost:8080/event-ticketing-service/api/events/2 -w "\\n"
+curl http://localhost:8080/event-ticketing-service/api/customers/1 -w "\\n"
+```
+
+![Transaction Runtime 02](../../images/TransactionRuntime_02.png)
+
+```bash
+# Tüm denemelerde booking-attempts tablosuna kayıt düşüldüğünü görebiliriz. Bu tabloya bakmak için aşağıdaki curl komutunu çalıştırabiliriz.
+curl http://localhost:8080/event-ticketing-service/api/booking-attempts -w "\\n"
+```
+
+![Transaction Runtime 03](../../images/TransactionRuntime_03.png)
+
+### Kapsam Dışı Bilgi
+
+Son curl komutu ile elde ettiğimiz JSON çıktısı rahat okunmuyor. **Linux** tarafında bu çıktıyı **jq** isimli bir araca devredebiliriz. Bu araç JSON çıktısını daha okunabilir bir şekilde formatlar.
+
+```bash
+# Önce kurulum
+sudo apt update && sudo apt install jq
+
+# Yeni çağrım şekli
+curl http://localhost:8080/event-ticketing-service/api/booking-attempts | jq
+```
+
+![Transaction Runtime 04](../../images/TransactionRuntime_04.png)
+
 ## FAQ
 
 - **Java EE denince aklımıza ne gelmeli?** Kurumsal çözümler geliştirmek için kullanılan bir özet spesifikasyonlar *(Abstract Specifications)* ve standartlar koleksiyonu.
